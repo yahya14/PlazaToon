@@ -3,7 +3,9 @@ Change the size and locations of different objects in the plaza with ease
 
 ##Support
 
-This program is created for Splatoon version 2.12.0.
+This program developed to support only Windows. To use it on Mac, use wine.
+
+This project is created for Splatoon version 2.12.0.
 
 The only supported TCPGecko clients are from the loadiine.ovh website.
 
