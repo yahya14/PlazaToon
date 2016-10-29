@@ -600,7 +600,7 @@
             this.Controls.Add(this.TCPBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "PlazaToon v0.1";
+            this.Text = "PlazaToon v0.2";
             this.TCPBox.ResumeLayout(false);
             this.TCPBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
