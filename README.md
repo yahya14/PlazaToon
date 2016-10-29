@@ -1,6 +1,8 @@
 # PlazaToon
 
-![alt text](http://i.imgur.com/Ap7MqNr.png "PlazaToon")
+<p align="center">
+  <img src="http://i.imgur.com/Ap7MqNr.png" alt="PlazaToon Image"/>
+</p>
 
 PlazaToon is a tool that lets you freely change the size and locations of different NPCs in the plaza with much more ease and freedom. This can also be done by modifying the byamls in the splatoon game files, but to make things easier, this tool modifies them in ram via TCPGecko connection.
 
