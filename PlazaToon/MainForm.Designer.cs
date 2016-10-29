@@ -119,7 +119,7 @@
             this.IPBox.Name = "IPBox";
             this.IPBox.Size = new System.Drawing.Size(115, 20);
             this.IPBox.TabIndex = 0;
-            this.IPBox.Text = "192.168.1.1";
+            this.IPBox.Text = "192.168.2.4";
             // 
             // NPCcomboBox
             // 

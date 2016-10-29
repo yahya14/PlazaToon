@@ -40,6 +40,8 @@ namespace PlazaToon
         public static uint[] NPCPointData = new uint[9];
 
         public TCPGecko gecko = null;
+        //private uint diff;
+
         public MainForm()
         {
             InitializeComponent();
@@ -93,6 +95,17 @@ namespace PlazaToon
                     gecko = null;
                     MessageBox.Show("Could not connect to TCPGecko.", "Connection failed", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     return;
+                }
+                //0x12CD1A0C
+                if (gecko.peek(0x12CD1A0C) == 0x00000006)
+                {
+                    //diff = 0x222;
+                    Console.WriteLine("pointer's are for Geckiine");
+                }
+                else
+                {
+                    Console.WriteLine("pointer's are for Loadiine");
+
                 }
                 ConnectButton.Text = "Recalculate";
                 ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(140)))), ((int)(((byte)(240)))));
@@ -243,11 +256,11 @@ namespace PlazaToon
             else if (NPCcomboBox.Text == "Judd")
             {
                 NPCSizeData[0] = triparamSizeDefault;
-                NPCSizeData[1] = triparamSizeDefault;
                 NPCSizeData[2] = triparamSizeDefault;
+                NPCSizeData[3] = triparamSizeDefault;
                 NPCSizeAddr[0] = chairsAddr - 0xE44;
-                NPCSizeAddr[1] = chairsAddr - 0xE34;
-                NPCSizeAddr[2] = chairsAddr - 0xE24;
+                NPCSizeAddr[2] = chairsAddr - 0xE34;
+                NPCSizeAddr[3] = chairsAddr - 0xE24;
                 NPCPointData[0] = chairsAddr - 0xE20;
                 NPCPointData[1] = chairsAddr - 0xE1C;
                 NPCPointData[2] = chairsAddr - 0xE18;
@@ -272,11 +285,11 @@ namespace PlazaToon
             else if (NPCcomboBox.Text == "Tree")
             {
                 NPCSizeData[0] = triparamSizeDefault;
-                NPCSizeData[1] = triparamSizeDefault;
                 NPCSizeData[2] = triparamSizeDefault;
+                NPCSizeData[3] = triparamSizeDefault;
                 NPCSizeAddr[0] = treeAddr - 0x3754;
-                NPCSizeAddr[1] = treeAddr - 0x3744;
-                NPCSizeAddr[2] = treeAddr - 0x3734;
+                NPCSizeAddr[2] = treeAddr - 0x3744;
+                NPCSizeAddr[3] = treeAddr - 0x3734;
                 NPCPointData[0] = treeAddr - 0x3730;
                 NPCPointData[1] = treeAddr - 0x372C;
                 NPCPointData[2] = treeAddr - 0x3728;
@@ -475,36 +488,40 @@ namespace PlazaToon
                 gecko.poke(NPCSizeAddr[0], float2Hex(x1));
             }
         }
-        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
-        {
-            var y = hex2Float(NPCSizeData[1]) * Convert.ToSingle(numericUpDown2.Value);
-            if (gecko != null)
-            {
-                gecko.poke(NPCSizeAddr[1], float2Hex(y));
-            }
-        }
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            var x2 = hex2Float(NPCSizeData[2]) * Convert.ToSingle(numericUpDown3.Value);
+            var y = hex2Float(NPCSizeData[2]) * Convert.ToSingle(numericUpDown3.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[2], float2Hex(x2));
+                gecko.poke(NPCSizeAddr[2], float2Hex(y));
+                
             }
         }
         private void numericUpDown4_ValueChanged(object sender, EventArgs e)
         {
-            var y = hex2Float(NPCSizeData[3]) * Convert.ToSingle(numericUpDown4.Value);
+            var z1 = hex2Float(NPCSizeData[3]) * Convert.ToSingle(numericUpDown4.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[3], float2Hex(y));
+                gecko.poke(NPCSizeAddr[3], float2Hex(z1));
+                Console.WriteLine(NPCSizeData[3]);
+                Console.WriteLine(Convert.ToSingle(numericUpDown4.Value));
+                Console.WriteLine(z1 + "\n");
+            }
+        }
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            var x2 = hex2Float(NPCSizeData[1]) * Convert.ToSingle(numericUpDown2.Value);
+            if (gecko != null)
+            {
+                gecko.poke(NPCSizeAddr[1], float2Hex(x2));
             }
         }
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
         {
-            var y = hex2Float(NPCSizeData[4]) * Convert.ToSingle(numericUpDown5.Value);
+            var y2 = hex2Float(NPCSizeData[4]) * Convert.ToSingle(numericUpDown5.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[4], float2Hex(y));
+                gecko.poke(NPCSizeAddr[4], float2Hex(y2));
             }
         }
 

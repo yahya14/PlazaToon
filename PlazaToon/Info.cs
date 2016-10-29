@@ -27,13 +27,13 @@ namespace PlazaToon
             spykeMasterScale(1);
             treeMasterScale(1);
 
-            callieInfoPoint(MainForm.calliePoint[0], MainForm.calliePoint[1], MainForm.calliePoint[2]);
-            callieChairInfoPoint(MainForm.calliePoint[0], MainForm.calliePoint[1], MainForm.calliePoint[2]);
-            marieInfoPoint(MainForm.mariePoint[0], MainForm.mariePoint[1], MainForm.mariePoint[2]);
-            marieChairInfoPoint(MainForm.mariePoint[0], MainForm.mariePoint[1], MainForm.mariePoint[2]);
-            juddInfoPoint(MainForm.juddPoint[0], MainForm.juddPoint[1], MainForm.juddPoint[2]);
-            spykeInfoPoint(MainForm.spykePoint[0], MainForm.spykePoint[1], MainForm.spykePoint[2]);
-            treeInfoPoint(MainForm.treePoint[0], MainForm.treePoint[1], MainForm.treePoint[2]);
+            callieInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[2])));
+            callieChairInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[2])));
+            marieInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[2])));
+            marieChairInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[2])));
+            juddInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.juddPoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.juddPoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.juddPoint[2])));
+            spykeInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.spykePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.spykePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.spykePoint[2])));
+            treeInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.treePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.treePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.treePoint[2])));
         }
 
         //Callie
