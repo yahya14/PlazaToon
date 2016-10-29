@@ -1,8 +1,10 @@
 # PlazaToon
 
 <p align="center">
-  <img src="http://i.imgur.com/Ap7MqNr.png" alt="PlazaToon Image"/>
+  <img src="http://i.imgur.com/MO3ZQ13.png" alt="PlazaToon Image"/>
 </p>
+
+[Downloads](https://github.com/yahya14/PlazaToon/releases/latest) | [Splatoon Modding Hub](http://gbatemp.net/threads/splatoon-modding-hub.425670/)
 
 PlazaToon is a tool that lets you freely change the size and locations of different NPCs in the plaza with much more ease and freedom. This can also be done by modifying the byamls in the splatoon game files, but to make things easier, this tool modifies them in ram via TCPGecko connection.
 
@@ -21,7 +23,7 @@ PlazaToon is a tool that lets you freely change the size and locations of differ
 
 **Note:** There wasn't any clarity in the tool of how things work, and some of the features still needs re-design to make it easy to use for everyone. Anyways...
 
-When launching the program, enter you Wii U's local IP in the entry box then click the connect button. The button will tranform into a blue colour that indicates that you're conected. Will come back to that later.
+When launching the program, enter you Wii U's local IP in the entry box then click the connect button. The button will tranform into a blue colour that indicates that you're conected. You don't have to click the *Recalculate* button after the first since it does that for you already, but remember that to always click it after every loading screen.
 
 ####Character selection
 
