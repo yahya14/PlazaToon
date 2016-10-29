@@ -12,7 +12,9 @@ PlazaToon is a tool that lets you freely change the size and locations of differ
 
 ##What you need to know about the Recalculate button
 
-So lets talk about moving addresses for a bit. In this situation, the NPC's addresses move everytime a loading screen appears. So once you are connected, keep in mind you'll need to click the *Recalculate* button *after* every loading screen. (but sometimes they don't move anymore, but better be safe to *prevent crashes*.)
+So lets talk about moving addresses for a bit. In this situation, the NPC's addresses move everytime a loading screen appears. So once you are connected, keep in mind you'll need to click the *Recalculate* button *after* every loading screen in the plaza. (but sometimes they don't move anymore, but better be safe to *prevent crashes*.)
+
+Also make sure that you disconnect the tool if you want to go online, if by chance you change a value in the tool during a match, your game will likely crash.
 
 ##Usage
 
