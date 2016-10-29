@@ -10,9 +10,9 @@
 
 PlazaToon is a tool that lets you freely change the size and locations of different NPCs in the plaza with much more ease and freedom. This can also be done by modifying the byamls in the splatoon game files, but to make things easier, this tool modifies them in ram via TCPGecko connection.
 
-##What you need to know about the *Recalculate* button when connected
+##What you need to know about the Recalculate button
 
-So lets talk about moving addresses for a bit. In this situation, the NPC's addresses move everytime a loading screen appears. So to keep in mind, you'll only need to click *Recalculate* button *after* every loading screen. (but sometimes they don't move anymore, but better be safe to *prevent crashes*.)
+So lets talk about moving addresses for a bit. In this situation, the NPC's addresses move everytime a loading screen appears. So once you are connected, keep in mind you'll need to click the *Recalculate* button *after* every loading screen. (but sometimes they don't move anymore, but better be safe to *prevent crashes*.)
 
 ##Usage
 
