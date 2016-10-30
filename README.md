@@ -6,7 +6,7 @@
 
 [Downloads](https://github.com/yahya14/PlazaToon/releases/latest) | [Splatoon Modding Hub](http://gbatemp.net/threads/splatoon-modding-hub.425670/)
 
-**Important note: Despite many of the bugs have been fixed, the tool still needs a sort of crash prevention in the program.**
+**Important note: Despite many of the bugs have been fixed, the tool still needs a sort of crash prevention implemented in the program.**
 
 PlazaToon is a tool that lets you freely change the size and locations of different NPCs in the plaza with much more ease and freedom. This can also be done by modifying the byamls in the splatoon game files, but to make things easier, this tool modifies them in ram via TCPGecko connection.
 
