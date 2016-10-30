@@ -17,6 +17,8 @@ namespace PlazaToon
         private uint chairsAddr;
         private uint spykeAddr;
         private uint treeAddr;
+        private uint trainAddr;
+        private uint manholeAddr;
         public static uint triparamSizeDefault = 0x3F800000;
 
         //arrays
@@ -25,6 +27,7 @@ namespace PlazaToon
         public static uint[] callieSize = new uint[9]       { 0x3F7490F0, 0x80000000, 0xBE974E63, 0, 0x3F800000, 0x80000000, 0x3E974E63, 0, 0x3F7490F0 };
         public static uint[] calliechairSize = new uint[9]  { 0x3F7490F0, 0, 0x3E974E64, 0x80000000, 0x3F800000, 0, 0xBE974E64, 0x80000000, 0x3F7490F0 };
         public static uint[] spykeSize = new uint[9]        { 0x3F2EA60F, 0, 0x3F3B2C5C, 0x80000000, 0x3F800000, 0, 0xBF3B2C5C, 0x80000000, 0x3F2EA60F };
+        public static uint[] arcadeSize = new uint[9]       { 0xBE882C60, 0x80000000, 0xBF76C799, 0, 0x3F800000, 0x80000000, 0x3F76C799, 0, 0xBE882C60 };
         //public static uint[] treeSize = new uint[3]         { 0x3F800000, 0x3F800000, 0x3F800000 };
         //public static uint[] juddSize = new uint[3]         { 0x3F800000, 0x3F800000, 0x3F800000 };
 
@@ -33,6 +36,8 @@ namespace PlazaToon
         public static uint[] juddPoint = new uint[3]      { 0x422B2428, 0x3E4CCCC7, 0xC3788B42 };
         public static uint[] spykePoint = new uint[3]     { 0x43C09762, 0x00000000, 0xC2FB6430 };
         public static uint[] treePoint = new uint[3]      { 0xC31F9663, 0x00000000, 0x42E39610 };
+        public static uint[] arcadePoint = new uint[3]    { 0xC35546E2, 0x3DCCCCC7, 0x43152D36 };
+        public static uint[] manholePoint = new uint[3]   { 0x42FEDB3C, 0x3E99999A, 0xC366BFA6 };
         public static uint[] originPoint = new uint[3]    { 0x00000000, 0x00000000, 0x00000000 };
 
         public static uint[] NPCSizeAddr = new uint[9];
@@ -40,7 +45,7 @@ namespace PlazaToon
         public static uint[] NPCPointData = new uint[9];
 
         public TCPGecko gecko = null;
-        //private uint diff;
+        private uint diff;
 
         public MainForm()
         {
@@ -79,7 +84,7 @@ namespace PlazaToon
         {
             return BitConverter.ToSingle(BitConverter.GetBytes(val), 0);
         }
-        private void ConnectButton_Click(object sender, MouseEventArgs e)
+        private void ConnectButton_Click(object sender, EventArgs e)
         {
             ////TCPGecko Connection area
             //This becomes both a connect and a recalc button
@@ -96,86 +101,56 @@ namespace PlazaToon
                     MessageBox.Show("Could not connect to TCPGecko.", "Connection failed", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     return;
                 }
-                //0x12CD1A0C
-                if (gecko.peek(0x12CD1A0C) == 0x00000006)
+                var check = gecko.peek(0x1CAAAC50);
+                
+                if (check == 0) //Geckiine
                 {
-                    //diff = 0x222;
-                    Console.WriteLine("pointer's are for Geckiine");
+                    diff = 0x4C0;
+                    ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(120)))), ((int)(((byte)(210))))); //dark blue change indicating geckiine
                 }
-                else
+                else if (check != 0 && gecko.peek(0x12CE3DA0) != 0x000003F2) //Loadiine
                 {
-                    Console.WriteLine("pointer's are for Loadiine");
-
+                    diff = 0;
+                    ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(145)))), ((int)(((byte)(245))))); //light blue change indicating Loadiine
+                    //Console.WriteLine("pointer's are for Loadiine");
+                }
+                else //Codehandler
+                {
+                    //diff = placeholder;
+                    //Console.WriteLine("pointer's are for the Codehandler...or none of the above");
                 }
                 ConnectButton.Text = "Recalculate";
-                ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(140)))), ((int)(((byte)(240)))));
                 DisconnButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-                sistersAddr = gecko.peek(0x1CAAAC50);
-                chairsAddr = gecko.peek(0x1CAAAE70);
-                spykeAddr = gecko.peek(0x1CAAAE78);
-                treeAddr = gecko.peek(chairsAddr - 0x4F40);
+
+                recalculateAddr();
                 NPCInfoSize();
                 numericBoxLoad();
+                NPCcomboBox.Focus();
             }
             else
             {
-                sistersAddr = gecko.peek(0x1CAAAC50);
-                chairsAddr = gecko.peek(0x1CAAAE70);
-                spykeAddr = gecko.peek(0x1CAAAE78);
-                treeAddr = gecko.peek(chairsAddr - 0x4F40);
-
-                if (e.Button == MouseButtons.Right)
-                {
-                    Info.resetti();
-                    //Callie
-                    gecko.poke(sistersAddr + 0x328, callieSize[0]);
-                    gecko.poke(sistersAddr + 0x330, callieSize[2]);
-                    gecko.poke(sistersAddr + 0x33C, callieSize[4]);
-                    gecko.poke(sistersAddr + 0x348, callieSize[6]);
-                    gecko.poke(sistersAddr + 0x350, callieSize[8]);
-                    //Callie's Chair
-                    gecko.poke(chairsAddr + 0x6BC, calliechairSize[0]);
-                    gecko.poke(chairsAddr + 0x6C4, calliechairSize[2]);
-                    gecko.poke(chairsAddr + 0x6CC, calliechairSize[4]);
-                    gecko.poke(chairsAddr + 0x6D4, calliechairSize[6]);
-                    gecko.poke(chairsAddr + 0x6DC, calliechairSize[8]);
-                    //Marie
-                    gecko.poke(sistersAddr + 0x7BC, marieSize[0]);
-                    gecko.poke(sistersAddr + 0x7C4, marieSize[2]);
-                    gecko.poke(sistersAddr + 0x7D0, marieSize[4]);
-                    gecko.poke(sistersAddr + 0x7DC, marieSize[6]);
-                    gecko.poke(sistersAddr + 0x7E4, marieSize[8]);
-                    //Marie's Chair
-                    gecko.poke(chairsAddr + 0xAC0, mariechairSize[0]);
-                    gecko.poke(chairsAddr + 0xAC8, mariechairSize[2]);
-                    gecko.poke(chairsAddr + 0xAD0, mariechairSize[4]);
-                    gecko.poke(chairsAddr + 0xAD8, mariechairSize[6]);
-                    gecko.poke(chairsAddr + 0xAE0, mariechairSize[8]);
-                    //Judd
-                    gecko.poke(chairsAddr - 0xE44, triparamSizeDefault);
-                    gecko.poke(chairsAddr - 0xE34, triparamSizeDefault);
-                    gecko.poke(chairsAddr - 0xE24, triparamSizeDefault);
-                    //Spyke
-                    gecko.poke(spykeAddr - 0x538, spykeSize[0]);
-                    gecko.poke(spykeAddr - 0x530, spykeSize[2]);
-                    gecko.poke(spykeAddr - 0x528, spykeSize[4]);
-                    gecko.poke(spykeAddr - 0x520, spykeSize[6]);
-                    gecko.poke(spykeAddr - 0x518, spykeSize[8]);
-                    //Tree
-                    gecko.poke(treeAddr + 0x3754, triparamSizeDefault);
-                    gecko.poke(treeAddr + 0x3744, triparamSizeDefault);
-                    gecko.poke(treeAddr + 0x3734, triparamSizeDefault);
-
-                    numericUpDown1.Value = 1;
-                    numericUpDown2.Value = 1;
-                    numericUpDown3.Value = 1;
-                    numericUpDown4.Value = 1;
-                    numericUpDown5.Value = 1;
-                }
-
+                recalcLabel.Visible = true;
+                recalculateAddr();
+                NPCInfoSize();
+                recalcTimer.Enabled = true;
             }
         }
-        private void DisconnButton_Click(object sender, MouseEventArgs e)
+        private void recalculateAddr()
+        {
+            sistersAddr = gecko.peek(0x1CAAAC50 - diff);
+            manholeAddr = gecko.peek(0x1CAAAE68 - diff);
+            chairsAddr = gecko.peek(0x1CAAAE70 - diff);
+            spykeAddr = gecko.peek(0x1CAAAE78 - diff);
+            treeAddr = gecko.peek(chairsAddr - 0x4F40);
+        }
+        private void IPBox_KeyDown(object sender, KeyEventArgs e) //User can press Enter to connect
+        {
+            if (e.KeyCode.ToString() == "Return")
+            {
+                ConnectButton_Click(sender, e);
+            }
+        }
+        private void DisconnButton_Click(object sender, EventArgs e)
         {
             if (gecko != null)
             {
@@ -186,7 +161,114 @@ namespace PlazaToon
                 DisconnButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(35)))), ((int)(((byte)(50)))));
             }
         }
-        private void NPCInfoSize()
+        private void resetAllToolStripMenuItem_Click(object sender, EventArgs e) //resets all variables, sizes and locations in-game to default
+        {
+            var confirmResult = MessageBox.Show("Are you sure you want to reset the size and location for all NPCs?", "Reset All ", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+            if (gecko != null && confirmResult == DialogResult.Yes) //confirmation to reset
+            {
+                Info.resetti();
+
+                recalculateAddr();
+                NPCInfoSize();
+                numericBoxLoad();
+                //Callie
+                gecko.poke(sistersAddr + 0x328, callieSize[0]);
+                gecko.poke(sistersAddr + 0x330, callieSize[2]);
+                gecko.poke(sistersAddr + 0x33C, callieSize[4]);
+                gecko.poke(sistersAddr + 0x348, callieSize[6]);
+                gecko.poke(sistersAddr + 0x350, callieSize[8]);
+
+                gecko.poke(sistersAddr + 0x334, calliePoint[0]);
+                gecko.poke(sistersAddr + 0x344, calliePoint[1]);
+                gecko.poke(sistersAddr + 0x354, calliePoint[2]);
+                //Callie's Chair
+                gecko.poke(chairsAddr + 0x6BC, calliechairSize[0]);
+                gecko.poke(chairsAddr + 0x6C4, calliechairSize[2]);
+                gecko.poke(chairsAddr + 0x6CC, calliechairSize[4]);
+                gecko.poke(chairsAddr + 0x6D4, calliechairSize[6]);
+                gecko.poke(chairsAddr + 0x6DC, calliechairSize[8]);
+
+                gecko.poke(chairsAddr + 0x6E0, calliePoint[0]);
+                gecko.poke(chairsAddr + 0x6E4, calliePoint[1]);
+                gecko.poke(chairsAddr + 0x6E8, calliePoint[2]);
+                //Marie
+                gecko.poke(sistersAddr + 0x7BC, marieSize[0]);
+                gecko.poke(sistersAddr + 0x7C4, marieSize[2]);
+                gecko.poke(sistersAddr + 0x7D0, marieSize[4]);
+                gecko.poke(sistersAddr + 0x7DC, marieSize[6]);
+                gecko.poke(sistersAddr + 0x7E4, marieSize[8]);
+
+                gecko.poke(sistersAddr + 0x7C8, mariePoint[0]);
+                gecko.poke(sistersAddr + 0x7D8, mariePoint[1]);
+                gecko.poke(sistersAddr + 0x7E8, mariePoint[2]);
+                //Marie's Chair
+                gecko.poke(chairsAddr + 0xAC0, mariechairSize[0]);
+                gecko.poke(chairsAddr + 0xAC8, mariechairSize[2]);
+                gecko.poke(chairsAddr + 0xAD0, mariechairSize[4]);
+                gecko.poke(chairsAddr + 0xAD8, mariechairSize[6]);
+                gecko.poke(chairsAddr + 0xAE0, mariechairSize[8]);
+
+                gecko.poke(chairsAddr + 0xAE4, mariePoint[0]);
+                gecko.poke(chairsAddr + 0xAE8, mariePoint[1]);
+                gecko.poke(chairsAddr + 0xAEC, mariePoint[2]);
+                //Judd
+                gecko.poke(chairsAddr - 0xE44, triparamSizeDefault);
+                gecko.poke(chairsAddr - 0xE34, triparamSizeDefault);
+                gecko.poke(chairsAddr - 0xE24, triparamSizeDefault);
+
+                gecko.poke(chairsAddr - 0xE20, juddPoint[0]);
+                gecko.poke(chairsAddr - 0xE1C, juddPoint[1]);
+                gecko.poke(chairsAddr - 0xE18, juddPoint[2]);
+                //Spyke
+                gecko.poke(spykeAddr - 0x538, spykeSize[0]);
+                gecko.poke(spykeAddr - 0x530, spykeSize[2]);
+                gecko.poke(spykeAddr - 0x528, spykeSize[4]);
+                gecko.poke(spykeAddr - 0x520, spykeSize[6]);
+                gecko.poke(spykeAddr - 0x518, spykeSize[8]);
+
+                gecko.poke(spykeAddr - 0x514, spykePoint[0]);
+                gecko.poke(spykeAddr - 0x510, spykePoint[1]);
+                gecko.poke(spykeAddr - 0x50C, spykePoint[2]);
+                //Tree
+                gecko.poke(treeAddr + 0x3754, triparamSizeDefault);
+                gecko.poke(treeAddr + 0x3744, triparamSizeDefault);
+                gecko.poke(treeAddr + 0x3734, triparamSizeDefault);
+
+                gecko.poke(treeAddr - 0x3730, treePoint[0]);
+                gecko.poke(treeAddr - 0x372C, treePoint[1]);
+                gecko.poke(treeAddr - 0x3728, treePoint[2]);
+                //Arcade
+                gecko.poke(chairsAddr + 0x140, arcadeSize[0]);
+                gecko.poke(chairsAddr + 0x148, arcadeSize[2]);
+                gecko.poke(chairsAddr + 0x150, arcadeSize[4]);
+                gecko.poke(chairsAddr + 0x158, arcadeSize[6]);
+                gecko.poke(chairsAddr + 0x160, arcadeSize[8]);
+
+                gecko.poke(chairsAddr + 0x164, arcadePoint[0]);
+                gecko.poke(chairsAddr + 0x168, arcadePoint[1]);
+                gecko.poke(chairsAddr + 0x16C, arcadePoint[2]);
+                //Manhole
+                gecko.poke(manholeAddr - 0x6FC, triparamSizeDefault);
+                gecko.poke(manholeAddr - 0x6EC, triparamSizeDefault);
+                gecko.poke(manholeAddr - 0x6DC, triparamSizeDefault);
+
+                gecko.poke(manholeAddr - 0x6D8, manholePoint[0]);
+                gecko.poke(manholeAddr - 0x6D4, manholePoint[1]);
+                gecko.poke(manholeAddr - 0x6D0, manholePoint[2]);
+            }
+            else if (confirmResult == DialogResult.No) { }
+            else
+            {
+                MessageBox.Show("Size and location has not been resetted.", "Reset All Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+        }
+        private void recalcTimer_Tick(object sender, EventArgs e) //displays that addresses have been recalculated
+        {
+            recalcLabel.Visible = false;
+            recalcTimer.Enabled = false;
+        }
+
+        private void NPCInfoSize() //Where NPC Data is handled
         {
             if (NPCcomboBox.Text == "Callie")
             {
@@ -251,7 +333,7 @@ namespace PlazaToon
                 NPCSizeAddr[4] = chairsAddr + 0xAE0;
                 NPCPointData[0] = chairsAddr + 0xAE4;
                 NPCPointData[1] = chairsAddr + 0xAE8;
-                NPCPointData[2] = chairsAddr + 0xAF0;
+                NPCPointData[2] = chairsAddr + 0xAEC;
             }
             else if (NPCcomboBox.Text == "Judd")
             {
@@ -278,9 +360,9 @@ namespace PlazaToon
                 NPCSizeAddr[2] = spykeAddr - 0x528;
                 NPCSizeAddr[3] = spykeAddr - 0x520;
                 NPCSizeAddr[4] = spykeAddr - 0x518;
-                NPCPointData[0] = chairsAddr - 0x514;
-                NPCPointData[1] = chairsAddr - 0x510;
-                NPCPointData[2] = chairsAddr - 0x50C;
+                NPCPointData[0] = spykeAddr - 0x514;
+                NPCPointData[1] = spykeAddr - 0x510;
+                NPCPointData[2] = spykeAddr - 0x50C;
             }
             else if (NPCcomboBox.Text == "Tree")
             {
@@ -294,8 +376,36 @@ namespace PlazaToon
                 NPCPointData[1] = treeAddr - 0x372C;
                 NPCPointData[2] = treeAddr - 0x3728;
             }
+            else if (NPCcomboBox.Text == "Arcade")
+            {
+                NPCSizeData[0] = arcadeSize[0];
+                NPCSizeData[1] = arcadeSize[2];
+                NPCSizeData[2] = arcadeSize[4];
+                NPCSizeData[3] = arcadeSize[6];
+                NPCSizeData[4] = arcadeSize[8];
+                NPCSizeAddr[0] = chairsAddr + 0x140;
+                NPCSizeAddr[1] = chairsAddr + 0x148;
+                NPCSizeAddr[2] = chairsAddr + 0x150;
+                NPCSizeAddr[3] = chairsAddr + 0x158;
+                NPCSizeAddr[4] = chairsAddr + 0x160;
+                NPCPointData[0] = chairsAddr + 0x164;
+                NPCPointData[1] = chairsAddr + 0x168;
+                NPCPointData[2] = chairsAddr + 0x16C;
+            }
+            else if (NPCcomboBox.Text == "Manhole")
+            {
+                NPCSizeData[0] = triparamSizeDefault;
+                NPCSizeData[2] = triparamSizeDefault;
+                NPCSizeData[3] = triparamSizeDefault;
+                NPCSizeAddr[0] = manholeAddr - 0x6FC;
+                NPCSizeAddr[2] = manholeAddr - 0x6EC;
+                NPCSizeAddr[3] = manholeAddr - 0x6DC;
+                NPCPointData[0] = manholeAddr - 0x6D8;
+                NPCPointData[1] = manholeAddr - 0x6D4;
+                NPCPointData[2] = manholeAddr - 0x6D0;
+            }
         }
-        private void numericBoxLoad()
+        private void numericBoxLoad() //where the numeric boxes are handled
         {
             if (NPCcomboBox.Text == "Callie")
             {
@@ -355,8 +465,8 @@ namespace PlazaToon
             {
                 masternumericUpDown.Value = Info.juddInfoSizeMaster;
                 numericUpDown1.Value = Info.juddInfoSize1;
-                numericUpDown2.Value = Info.juddInfoSize2;
-                numericUpDown3.Value = Info.juddInfoSize3;
+                numericUpDown3.Value = Info.juddInfoSize2;
+                numericUpDown4.Value = Info.juddInfoSize3;
 
                 locnumericUpDown1.Value = Info.juddInfoPoint1;
                 locnumericUpDown2.Value = Info.juddInfoPoint2;
@@ -380,20 +490,42 @@ namespace PlazaToon
             {
                 masternumericUpDown.Value = Info.treeInfoSizeMaster;
                 numericUpDown1.Value = Info.treeInfoSize1;
-                numericUpDown2.Value = Info.treeInfoSize2;
-                numericUpDown3.Value = Info.treeInfoSize3;
+                numericUpDown3.Value = Info.treeInfoSize2;
+                numericUpDown4.Value = Info.treeInfoSize3;
 
                 locnumericUpDown1.Value = Info.treeInfoPoint1;
                 locnumericUpDown2.Value = Info.treeInfoPoint2;
                 locnumericUpDown3.Value = Info.treeInfoPoint3;
             }
+            else if (NPCcomboBox.Text == "Arcade")
+            {
+                masternumericUpDown.Value = Info.arcadeInfoSizeMaster;
+                numericUpDown1.Value = Info.arcadeInfoSize1;
+                numericUpDown2.Value = Info.arcadeInfoSize2;
+                numericUpDown3.Value = Info.arcadeInfoSize3;
+                numericUpDown4.Value = Info.arcadeInfoSize4;
+                numericUpDown5.Value = Info.arcadeInfoSize5;
+
+                locnumericUpDown1.Value = Info.arcadeInfoPoint1;
+                locnumericUpDown2.Value = Info.arcadeInfoPoint2;
+                locnumericUpDown3.Value = Info.arcadeInfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Manhole")
+            {
+                masternumericUpDown.Value = Info.manholeInfoSizeMaster;
+                numericUpDown1.Value = Info.manholeInfoSize1;
+                numericUpDown3.Value = Info.manholeInfoSize2;
+                numericUpDown4.Value = Info.manholeInfoSize3;
+
+                locnumericUpDown1.Value = Info.manholeInfoPoint1;
+                locnumericUpDown2.Value = Info.manholeInfoPoint2;
+                locnumericUpDown3.Value = Info.manholeInfoPoint3;
+            }
         }
         
-        private void NPCcomboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void NPCcomboBox_SelectedIndexChanged(object sender, EventArgs e) //controls Enabled events
         {
-            NPCInfoSize();
-            numericBoxLoad();
-            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree")
+            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree" || NPCcomboBox.Text == "Manhole")
             {
                 numericUpDown2.Enabled = false;
                 numericUpDown5.Enabled = false;
@@ -403,6 +535,8 @@ namespace PlazaToon
                 numericUpDown2.Enabled = true;
                 numericUpDown5.Enabled = true;
             }
+            NPCInfoSize();
+            numericBoxLoad();
         }
 
         private void NPCsav() //saves NPC values
@@ -432,7 +566,7 @@ namespace PlazaToon
             }
             else if (NPCcomboBox.Text == "Judd")
             {
-                Info.juddInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown2.Value);
+                Info.juddInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
                 Info.juddInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
 
             }
@@ -444,12 +578,22 @@ namespace PlazaToon
             }
             else if (NPCcomboBox.Text == "Tree")
             {
-                Info.treeInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown2.Value);
+                Info.treeInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
                 Info.treeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+            }
+            else if (NPCcomboBox.Text == "Arcade")
+            {
+                Info.arcadeInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
+                Info.arcadeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
 
             }
+            else if (NPCcomboBox.Text == "Manhole")
+            {
+                Info.manholeInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
+                Info.manholeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+            }
         }
-        private void masterScaleSav() //saves NPC values
+        private void masterScaleSav() //saves master scale values
         {
             if (NPCcomboBox.Text == "Callie")
             {
@@ -479,9 +623,22 @@ namespace PlazaToon
             {
                 Info.treeMasterScale(masternumericUpDown.Value);
             }
+            else if (NPCcomboBox.Text == "Arcade")
+            {
+                Info.arcadeMasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Manhole")
+            {
+                Info.manholeMasterScale(masternumericUpDown.Value);
+            }
         }
+        //several size numeric boxes
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
+            if (oneandtwoCheckBox.Checked == true && numericUpDown2.Enabled == true)
+            {
+                numericUpDown2.Value = numericUpDown1.Value;
+            }
             var x1 = hex2Float(NPCSizeData[0]) * Convert.ToSingle(numericUpDown1.Value);
             if (gecko != null)
             {
@@ -490,44 +647,52 @@ namespace PlazaToon
         }
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            var y = hex2Float(NPCSizeData[2]) * Convert.ToSingle(numericUpDown3.Value);
+            var x2 = hex2Float(NPCSizeData[2]) * Convert.ToSingle(numericUpDown3.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[2], float2Hex(y));
-                
+                gecko.poke(NPCSizeAddr[2], float2Hex(x2));
             }
         }
         private void numericUpDown4_ValueChanged(object sender, EventArgs e)
         {
-            var z1 = hex2Float(NPCSizeData[3]) * Convert.ToSingle(numericUpDown4.Value);
+            if (oneandtwoCheckBox.Checked == true && numericUpDown5.Enabled == true)
+            {
+                numericUpDown5.Value = numericUpDown4.Value;
+            }
+            var y = hex2Float(NPCSizeData[3]) * Convert.ToSingle(numericUpDown4.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[3], float2Hex(z1));
-                Console.WriteLine(NPCSizeData[3]);
-                Console.WriteLine(Convert.ToSingle(numericUpDown4.Value));
-                Console.WriteLine(z1 + "\n");
+                gecko.poke(NPCSizeAddr[3], float2Hex(y));
             }
         }
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            var x2 = hex2Float(NPCSizeData[1]) * Convert.ToSingle(numericUpDown2.Value);
+            if (oneandtwoCheckBox.Checked == true && numericUpDown1.Enabled == true)
+            {
+                numericUpDown1.Value = numericUpDown2.Value;
+            }
+            var y = hex2Float(NPCSizeData[1]) * Convert.ToSingle(numericUpDown2.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[1], float2Hex(x2));
+                gecko.poke(NPCSizeAddr[1], float2Hex(y));
             }
         }
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
         {
-            var y2 = hex2Float(NPCSizeData[4]) * Convert.ToSingle(numericUpDown5.Value);
+            if (oneandtwoCheckBox.Checked == true && numericUpDown4.Enabled == true)
+            {
+                numericUpDown4.Value = numericUpDown5.Value;
+            }
+            var y = hex2Float(NPCSizeData[4]) * Convert.ToSingle(numericUpDown5.Value);
             if (gecko != null)
             {
-                gecko.poke(NPCSizeAddr[4], float2Hex(y2));
+                gecko.poke(NPCSizeAddr[4], float2Hex(y));
             }
         }
-
+        //master numeric box
         private void masternumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree")
+            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree" || NPCcomboBox.Text == "Manhole")
             {
                 numericUpDown1.Value = masternumericUpDown.Value;
                 numericUpDown4.Value = masternumericUpDown.Value;
@@ -542,6 +707,7 @@ namespace PlazaToon
                 numericUpDown5.Value = masternumericUpDown.Value;
             }
         }
+        //several location numeric boxes
         private void locnumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             if (gecko != null)
@@ -555,7 +721,6 @@ namespace PlazaToon
             { 
             gecko.poke(NPCPointData[1], float2Hex(Convert.ToSingle(locnumericUpDown2.Value)));
             }
-
         }
         private void locnumericUpDown3_ValueChanged(object sender, EventArgs e)
         {
@@ -575,7 +740,7 @@ namespace PlazaToon
         private void locnumericUpDown1_MouseUp(object sender, MouseEventArgs e) { NPCsav(); }
         private void locnumericUpDown2_MouseUp(object sender, MouseEventArgs e) { NPCsav(); }
         private void locnumericUpDown3_MouseUp(object sender, MouseEventArgs e) { NPCsav(); }
-        //you know what they say, always play it safe
+        //you know what they say, always play it safe (with keydowns)
         private void numericUpDown1_KeyUp(object sender, KeyEventArgs e) { NPCsav(); }
         private void numericUpDown2_KeyUp(object sender, KeyEventArgs e) { NPCsav(); }
         private void numericUpDown3_KeyUp(object sender, KeyEventArgs e) { NPCsav(); }
@@ -588,5 +753,10 @@ namespace PlazaToon
         //Master scale seperate save
         private void masternumericUpDown_KeyUp(object sender, KeyEventArgs e) { masterScaleSav(); }
         private void masternumericUpDown_MouseUp(object sender, MouseEventArgs e) { masterScaleSav(); }
+
+        //click the labels to set the coords to 0
+        private void locxlabel_Click(object sender, EventArgs e) { locnumericUpDown1.Value = 0; NPCsav(); }
+        private void locyLabel_Click(object sender, EventArgs e) { locnumericUpDown2.Value = 0; NPCsav(); }
+        private void loczLabel_Click(object sender, EventArgs e) { locnumericUpDown3.Value = 0; NPCsav(); }
     }
 }

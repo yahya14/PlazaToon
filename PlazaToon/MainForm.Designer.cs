@@ -40,25 +40,30 @@
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.sizeLabel = new System.Windows.Forms.Label();
             this.ModgroupBox = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.oneandtwoCheckBox = new System.Windows.Forms.CheckBox();
+            this.loczLabel = new System.Windows.Forms.Label();
             this.zScaleLabel = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.locyLabel = new System.Windows.Forms.Label();
             this.z2label = new System.Windows.Forms.Label();
             this.yScaleLabel = new System.Windows.Forms.Label();
-            this.label = new System.Windows.Forms.Label();
+            this.locxLabel = new System.Windows.Forms.Label();
             this.x2ScaleLabel = new System.Windows.Forms.Label();
             this.xScaleLabel = new System.Windows.Forms.Label();
             this.masterLabel = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.coordLabel = new System.Windows.Forms.Label();
             this.masternumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.locnumericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.locnumericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.locnumericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.creatorLabel = new System.Windows.Forms.Label();
             this.creditLabel = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recalcTimer = new System.Windows.Forms.Timer(this.components);
+            this.recalcLabel = new System.Windows.Forms.Label();
             this.TCPBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -70,6 +75,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown2)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TCPBox
@@ -77,9 +83,9 @@
             this.TCPBox.Controls.Add(this.DisconnButton);
             this.TCPBox.Controls.Add(this.ConnectButton);
             this.TCPBox.Controls.Add(this.IPBox);
-            this.TCPBox.Location = new System.Drawing.Point(3, 8);
+            this.TCPBox.Location = new System.Drawing.Point(3, 22);
             this.TCPBox.Name = "TCPBox";
-            this.TCPBox.Size = new System.Drawing.Size(398, 48);
+            this.TCPBox.Size = new System.Drawing.Size(343, 48);
             this.TCPBox.TabIndex = 6;
             this.TCPBox.TabStop = false;
             this.TCPBox.Text = "TCPGecko Connection";
@@ -90,13 +96,13 @@
             this.DisconnButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.DisconnButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DisconnButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.DisconnButton.Location = new System.Drawing.Point(269, 17);
+            this.DisconnButton.Location = new System.Drawing.Point(233, 17);
             this.DisconnButton.Name = "DisconnButton";
-            this.DisconnButton.Size = new System.Drawing.Size(120, 23);
+            this.DisconnButton.Size = new System.Drawing.Size(100, 22);
             this.DisconnButton.TabIndex = 2;
             this.DisconnButton.Text = "Disconnect";
             this.DisconnButton.UseVisualStyleBackColor = false;
-            this.DisconnButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DisconnButton_Click);
+            this.DisconnButton.Click += new System.EventHandler(this.DisconnButton_Click);
             // 
             // ConnectButton
             // 
@@ -104,22 +110,22 @@
             this.ConnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.ConnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ConnectButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ConnectButton.Location = new System.Drawing.Point(131, 17);
+            this.ConnectButton.Location = new System.Drawing.Point(127, 17);
             this.ConnectButton.Name = "ConnectButton";
-            this.ConnectButton.Size = new System.Drawing.Size(120, 23);
+            this.ConnectButton.Size = new System.Drawing.Size(100, 22);
             this.ConnectButton.TabIndex = 1;
             this.ConnectButton.Text = "Connect";
-            this.toolTip1.SetToolTip(this.ConnectButton, "* right click to reset all saved values");
             this.ConnectButton.UseVisualStyleBackColor = false;
-            this.ConnectButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ConnectButton_Click);
+            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
             // IPBox
             // 
             this.IPBox.Location = new System.Drawing.Point(8, 19);
             this.IPBox.Name = "IPBox";
-            this.IPBox.Size = new System.Drawing.Size(115, 20);
+            this.IPBox.Size = new System.Drawing.Size(110, 20);
             this.IPBox.TabIndex = 0;
             this.IPBox.Text = "192.168.2.4";
+            this.IPBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.IPBox_KeyDown);
             // 
             // NPCcomboBox
             // 
@@ -131,8 +137,10 @@
             "Marie\'s Chair",
             "Judd",
             "Spyke",
-            "Tree"});
-            this.NPCcomboBox.Location = new System.Drawing.Point(15, 29);
+            "Tree",
+            "Arcade",
+            "Manhole"});
+            this.NPCcomboBox.Location = new System.Drawing.Point(10, 20);
             this.NPCcomboBox.Name = "NPCcomboBox";
             this.NPCcomboBox.Size = new System.Drawing.Size(141, 21);
             this.NPCcomboBox.TabIndex = 10;
@@ -148,7 +156,7 @@
             0,
             0,
             131072});
-            this.numericUpDown1.Location = new System.Drawing.Point(30, 92);
+            this.numericUpDown1.Location = new System.Drawing.Point(11, 79);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -180,7 +188,7 @@
             0,
             0,
             131072});
-            this.numericUpDown2.Location = new System.Drawing.Point(30, 120);
+            this.numericUpDown2.Location = new System.Drawing.Point(11, 107);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -212,7 +220,7 @@
             0,
             0,
             131072});
-            this.numericUpDown3.Location = new System.Drawing.Point(140, 92);
+            this.numericUpDown3.Location = new System.Drawing.Point(121, 79);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -244,7 +252,7 @@
             0,
             0,
             131072});
-            this.numericUpDown5.Location = new System.Drawing.Point(250, 120);
+            this.numericUpDown5.Location = new System.Drawing.Point(231, 107);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -276,7 +284,7 @@
             0,
             0,
             131072});
-            this.numericUpDown4.Location = new System.Drawing.Point(250, 92);
+            this.numericUpDown4.Location = new System.Drawing.Point(231, 79);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -302,7 +310,7 @@
             // sizeLabel
             // 
             this.sizeLabel.AutoSize = true;
-            this.sizeLabel.Location = new System.Drawing.Point(12, 62);
+            this.sizeLabel.Location = new System.Drawing.Point(8, 49);
             this.sizeLabel.Name = "sizeLabel";
             this.sizeLabel.Size = new System.Drawing.Size(77, 13);
             this.sizeLabel.TabIndex = 11;
@@ -310,16 +318,17 @@
             // 
             // ModgroupBox
             // 
-            this.ModgroupBox.Controls.Add(this.label10);
+            this.ModgroupBox.Controls.Add(this.oneandtwoCheckBox);
+            this.ModgroupBox.Controls.Add(this.loczLabel);
             this.ModgroupBox.Controls.Add(this.zScaleLabel);
-            this.ModgroupBox.Controls.Add(this.label9);
+            this.ModgroupBox.Controls.Add(this.locyLabel);
             this.ModgroupBox.Controls.Add(this.z2label);
             this.ModgroupBox.Controls.Add(this.yScaleLabel);
-            this.ModgroupBox.Controls.Add(this.label);
+            this.ModgroupBox.Controls.Add(this.locxLabel);
             this.ModgroupBox.Controls.Add(this.x2ScaleLabel);
             this.ModgroupBox.Controls.Add(this.xScaleLabel);
             this.ModgroupBox.Controls.Add(this.masterLabel);
-            this.ModgroupBox.Controls.Add(this.label7);
+            this.ModgroupBox.Controls.Add(this.coordLabel);
             this.ModgroupBox.Controls.Add(this.sizeLabel);
             this.ModgroupBox.Controls.Add(this.NPCcomboBox);
             this.ModgroupBox.Controls.Add(this.numericUpDown4);
@@ -331,24 +340,35 @@
             this.ModgroupBox.Controls.Add(this.locnumericUpDown2);
             this.ModgroupBox.Controls.Add(this.numericUpDown3);
             this.ModgroupBox.Controls.Add(this.numericUpDown2);
-            this.ModgroupBox.Location = new System.Drawing.Point(3, 59);
+            this.ModgroupBox.Location = new System.Drawing.Point(3, 71);
             this.ModgroupBox.Name = "ModgroupBox";
-            this.ModgroupBox.Size = new System.Drawing.Size(398, 245);
+            this.ModgroupBox.Size = new System.Drawing.Size(343, 235);
             this.ModgroupBox.TabIndex = 8;
             this.ModgroupBox.TabStop = false;
             this.ModgroupBox.Text = "Control";
             // 
-            // label10
+            // oneandtwoCheckBox
             // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.SystemColors.Control;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label10.ForeColor = System.Drawing.Color.Gray;
-            this.label10.Location = new System.Drawing.Point(290, 199);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(11, 12);
-            this.label10.TabIndex = 12;
-            this.label10.Text = "Z";
+            this.oneandtwoCheckBox.AutoSize = true;
+            this.oneandtwoCheckBox.Location = new System.Drawing.Point(11, 144);
+            this.oneandtwoCheckBox.Name = "oneandtwoCheckBox";
+            this.oneandtwoCheckBox.Size = new System.Drawing.Size(175, 17);
+            this.oneandtwoCheckBox.TabIndex = 13;
+            this.oneandtwoCheckBox.Text = "Control the two x- and z- as one";
+            this.oneandtwoCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // loczLabel
+            // 
+            this.loczLabel.AutoSize = true;
+            this.loczLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.loczLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.loczLabel.ForeColor = System.Drawing.Color.Gray;
+            this.loczLabel.Location = new System.Drawing.Point(271, 190);
+            this.loczLabel.Name = "loczLabel";
+            this.loczLabel.Size = new System.Drawing.Size(11, 12);
+            this.loczLabel.TabIndex = 12;
+            this.loczLabel.Text = "Z";
+            this.loczLabel.Click += new System.EventHandler(this.loczLabel_Click);
             // 
             // zScaleLabel
             // 
@@ -356,23 +376,24 @@
             this.zScaleLabel.BackColor = System.Drawing.SystemColors.Control;
             this.zScaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
             this.zScaleLabel.ForeColor = System.Drawing.Color.Gray;
-            this.zScaleLabel.Location = new System.Drawing.Point(290, 78);
+            this.zScaleLabel.Location = new System.Drawing.Point(271, 65);
             this.zScaleLabel.Name = "zScaleLabel";
             this.zScaleLabel.Size = new System.Drawing.Size(11, 12);
             this.zScaleLabel.TabIndex = 12;
             this.zScaleLabel.Text = "Z";
             // 
-            // label9
+            // locyLabel
             // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.SystemColors.Control;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label9.ForeColor = System.Drawing.Color.Gray;
-            this.label9.Location = new System.Drawing.Point(180, 199);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(10, 12);
-            this.label9.TabIndex = 12;
-            this.label9.Text = "Y";
+            this.locyLabel.AutoSize = true;
+            this.locyLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.locyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.locyLabel.ForeColor = System.Drawing.Color.Gray;
+            this.locyLabel.Location = new System.Drawing.Point(161, 190);
+            this.locyLabel.Name = "locyLabel";
+            this.locyLabel.Size = new System.Drawing.Size(10, 12);
+            this.locyLabel.TabIndex = 12;
+            this.locyLabel.Text = "Y";
+            this.locyLabel.Click += new System.EventHandler(this.locyLabel_Click);
             // 
             // z2label
             // 
@@ -380,7 +401,7 @@
             this.z2label.BackColor = System.Drawing.SystemColors.Control;
             this.z2label.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
             this.z2label.ForeColor = System.Drawing.Color.Gray;
-            this.z2label.Location = new System.Drawing.Point(290, 142);
+            this.z2label.Location = new System.Drawing.Point(271, 129);
             this.z2label.Name = "z2label";
             this.z2label.Size = new System.Drawing.Size(18, 12);
             this.z2label.TabIndex = 12;
@@ -392,23 +413,24 @@
             this.yScaleLabel.BackColor = System.Drawing.SystemColors.Control;
             this.yScaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
             this.yScaleLabel.ForeColor = System.Drawing.Color.Gray;
-            this.yScaleLabel.Location = new System.Drawing.Point(180, 78);
+            this.yScaleLabel.Location = new System.Drawing.Point(161, 65);
             this.yScaleLabel.Name = "yScaleLabel";
             this.yScaleLabel.Size = new System.Drawing.Size(10, 12);
             this.yScaleLabel.TabIndex = 12;
             this.yScaleLabel.Text = "Y";
             // 
-            // label
+            // locxLabel
             // 
-            this.label.AutoSize = true;
-            this.label.BackColor = System.Drawing.SystemColors.Control;
-            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label.ForeColor = System.Drawing.Color.Gray;
-            this.label.Location = new System.Drawing.Point(70, 199);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(11, 12);
-            this.label.TabIndex = 11;
-            this.label.Text = "X";
+            this.locxLabel.AutoSize = true;
+            this.locxLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.locxLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.locxLabel.ForeColor = System.Drawing.Color.Gray;
+            this.locxLabel.Location = new System.Drawing.Point(51, 190);
+            this.locxLabel.Name = "locxLabel";
+            this.locxLabel.Size = new System.Drawing.Size(11, 12);
+            this.locxLabel.TabIndex = 11;
+            this.locxLabel.Text = "X";
+            this.locxLabel.Click += new System.EventHandler(this.locxlabel_Click);
             // 
             // x2ScaleLabel
             // 
@@ -416,7 +438,7 @@
             this.x2ScaleLabel.BackColor = System.Drawing.SystemColors.Control;
             this.x2ScaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
             this.x2ScaleLabel.ForeColor = System.Drawing.Color.Gray;
-            this.x2ScaleLabel.Location = new System.Drawing.Point(70, 142);
+            this.x2ScaleLabel.Location = new System.Drawing.Point(51, 129);
             this.x2ScaleLabel.Name = "x2ScaleLabel";
             this.x2ScaleLabel.Size = new System.Drawing.Size(18, 12);
             this.x2ScaleLabel.TabIndex = 11;
@@ -428,7 +450,7 @@
             this.xScaleLabel.BackColor = System.Drawing.SystemColors.Control;
             this.xScaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
             this.xScaleLabel.ForeColor = System.Drawing.Color.Gray;
-            this.xScaleLabel.Location = new System.Drawing.Point(70, 78);
+            this.xScaleLabel.Location = new System.Drawing.Point(51, 65);
             this.xScaleLabel.Name = "xScaleLabel";
             this.xScaleLabel.Size = new System.Drawing.Size(11, 12);
             this.xScaleLabel.TabIndex = 11;
@@ -440,20 +462,20 @@
             this.masterLabel.BackColor = System.Drawing.SystemColors.Control;
             this.masterLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
             this.masterLabel.ForeColor = System.Drawing.Color.Gray;
-            this.masterLabel.Location = new System.Drawing.Point(157, 142);
+            this.masterLabel.Location = new System.Drawing.Point(138, 129);
             this.masterLabel.Name = "masterLabel";
             this.masterLabel.Size = new System.Drawing.Size(60, 12);
             this.masterLabel.TabIndex = 11;
             this.masterLabel.Text = "Master Scale";
             // 
-            // label7
+            // coordLabel
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 183);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(106, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Coordinates Modifier:";
+            this.coordLabel.AutoSize = true;
+            this.coordLabel.Location = new System.Drawing.Point(8, 175);
+            this.coordLabel.Name = "coordLabel";
+            this.coordLabel.Size = new System.Drawing.Size(106, 13);
+            this.coordLabel.TabIndex = 11;
+            this.coordLabel.Text = "Coordinates Modifier:";
             // 
             // masternumericUpDown
             // 
@@ -465,7 +487,7 @@
             0,
             0,
             131072});
-            this.masternumericUpDown.Location = new System.Drawing.Point(140, 120);
+            this.masternumericUpDown.Location = new System.Drawing.Point(121, 107);
             this.masternumericUpDown.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -492,7 +514,7 @@
             // 
             this.locnumericUpDown1.DecimalPlaces = 4;
             this.locnumericUpDown1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.locnumericUpDown1.Location = new System.Drawing.Point(30, 213);
+            this.locnumericUpDown1.Location = new System.Drawing.Point(11, 204);
             this.locnumericUpDown1.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -519,7 +541,7 @@
             // 
             this.locnumericUpDown3.DecimalPlaces = 4;
             this.locnumericUpDown3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.locnumericUpDown3.Location = new System.Drawing.Point(250, 213);
+            this.locnumericUpDown3.Location = new System.Drawing.Point(231, 204);
             this.locnumericUpDown3.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -546,7 +568,7 @@
             // 
             this.locnumericUpDown2.DecimalPlaces = 4;
             this.locnumericUpDown2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.locnumericUpDown2.Location = new System.Drawing.Point(140, 213);
+            this.locnumericUpDown2.Location = new System.Drawing.Point(121, 204);
             this.locnumericUpDown2.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -573,7 +595,7 @@
             // 
             this.creatorLabel.AutoSize = true;
             this.creatorLabel.ForeColor = System.Drawing.Color.Gray;
-            this.creatorLabel.Location = new System.Drawing.Point(331, 307);
+            this.creatorLabel.Location = new System.Drawing.Point(279, 310);
             this.creatorLabel.Name = "creatorLabel";
             this.creatorLabel.Size = new System.Drawing.Size(64, 13);
             this.creatorLabel.TabIndex = 13;
@@ -583,24 +605,71 @@
             // 
             this.creditLabel.AutoSize = true;
             this.creditLabel.ForeColor = System.Drawing.Color.Gray;
-            this.creditLabel.Location = new System.Drawing.Point(0, 307);
+            this.creditLabel.Location = new System.Drawing.Point(6, 310);
             this.creditLabel.Name = "creditLabel";
             this.creditLabel.Size = new System.Drawing.Size(235, 13);
             this.creditLabel.TabIndex = 13;
-            this.creditLabel.Text = "Credits to Amibu, Splatonka, and CosmoCortney.";
+            this.creditLabel.Text = "Credits to Amibu, Splatonka, CosmoCortney, etc.";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(351, 24);
+            this.menuStrip1.TabIndex = 15;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.resetAllToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // resetAllToolStripMenuItem
+            // 
+            this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
+            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.resetAllToolStripMenuItem.Text = "Reset All";
+            this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.resetAllToolStripMenuItem_Click);
+            // 
+            // recalcTimer
+            // 
+            this.recalcTimer.Interval = 1000;
+            this.recalcTimer.Tick += new System.EventHandler(this.recalcTimer_Tick);
+            // 
+            // recalcLabel
+            // 
+            this.recalcLabel.AutoSize = true;
+            this.recalcLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.recalcLabel.Location = new System.Drawing.Point(163, 8);
+            this.recalcLabel.Name = "recalcLabel";
+            this.recalcLabel.Size = new System.Drawing.Size(174, 13);
+            this.recalcLabel.TabIndex = 16;
+            this.recalcLabel.Text = "Addresses have been recalculated.";
+            this.recalcLabel.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(405, 324);
+            this.ClientSize = new System.Drawing.Size(351, 330);
+            this.Controls.Add(this.recalcLabel);
             this.Controls.Add(this.creditLabel);
             this.Controls.Add(this.creatorLabel);
             this.Controls.Add(this.ModgroupBox);
             this.Controls.Add(this.TCPBox);
+            this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "PlazaToon v0.2";
+            this.Text = "PlazaToon v0.3";
             this.TCPBox.ResumeLayout(false);
             this.TCPBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -614,6 +683,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown2)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -631,7 +702,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.NumericUpDown numericUpDown5;
         private System.Windows.Forms.NumericUpDown numericUpDown4;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label sizeLabel;
         private System.Windows.Forms.GroupBox ModgroupBox;
         private System.Windows.Forms.Label masterLabel;
@@ -644,12 +714,18 @@
         private System.Windows.Forms.Label xScaleLabel;
         private System.Windows.Forms.Label z2label;
         private System.Windows.Forms.Label x2ScaleLabel;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label loczLabel;
+        private System.Windows.Forms.Label locyLabel;
+        private System.Windows.Forms.Label locxLabel;
+        private System.Windows.Forms.Label coordLabel;
         private System.Windows.Forms.Label creatorLabel;
         private System.Windows.Forms.Label creditLabel;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
+        private System.Windows.Forms.Timer recalcTimer;
+        private System.Windows.Forms.Label recalcLabel;
+        private System.Windows.Forms.CheckBox oneandtwoCheckBox;
     }
 }
 

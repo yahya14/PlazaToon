@@ -26,14 +26,18 @@ namespace PlazaToon
             juddMasterScale(1);
             spykeMasterScale(1);
             treeMasterScale(1);
+            arcadeMasterScale(1);
+            manholeMasterScale(1);
 
-            callieInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[2])));
+            callieInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[1])),Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[2])));
             callieChairInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.calliePoint[2])));
             marieInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[2])));
             marieChairInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.mariePoint[2])));
             juddInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.juddPoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.juddPoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.juddPoint[2])));
             spykeInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.spykePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.spykePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.spykePoint[2])));
             treeInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.treePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.treePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.treePoint[2])));
+            arcadeInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.arcadePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.arcadePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.arcadePoint[2])));
+            manholeInfoPoint(Convert.ToDecimal(MainForm.hex2Float(MainForm.manholePoint[0])), Convert.ToDecimal(MainForm.hex2Float(MainForm.manholePoint[1])), Convert.ToDecimal(MainForm.hex2Float(MainForm.manholePoint[2])));
         }
 
         //Callie
@@ -238,6 +242,61 @@ namespace PlazaToon
             treeInfoPoint1 = x;
             treeInfoPoint2 = y;
             treeInfoPoint3 = z;
+        }
+        //Arcade
+        public static decimal arcadeInfoSize1 = 1;
+        public static decimal arcadeInfoSize2 = 1;
+        public static decimal arcadeInfoSize3 = 1;
+        public static decimal arcadeInfoSize4 = 1;
+        public static decimal arcadeInfoSize5 = 1;
+        public static decimal arcadeInfoSizeMaster = 1;
+
+        public static void arcadeInfoSize(decimal x1, decimal x2, decimal y, decimal z1, decimal z2)
+        {
+            arcadeInfoSize1 = x1;
+            arcadeInfoSize2 = x2;
+            arcadeInfoSize3 = y;
+            arcadeInfoSize4 = z1;
+            arcadeInfoSize5 = z2;
+        }
+        public static void arcadeMasterScale(decimal master)
+        {
+            arcadeInfoSizeMaster = master;
+        }
+        public static decimal arcadeInfoPoint1 = Convert.ToDecimal(MainForm.hex2Float(MainForm.arcadePoint[0]));
+        public static decimal arcadeInfoPoint2 = Convert.ToDecimal(MainForm.hex2Float(MainForm.arcadePoint[1]));
+        public static decimal arcadeInfoPoint3 = Convert.ToDecimal(MainForm.hex2Float(MainForm.arcadePoint[2]));
+
+        public static void arcadeInfoPoint(decimal x, decimal y, decimal z)
+        {
+            arcadeInfoPoint1 = x;
+            arcadeInfoPoint2 = y;
+            arcadeInfoPoint3 = z;
+        }
+        public static decimal manholeInfoSize1 = 1;
+        public static decimal manholeInfoSize2 = 1;
+        public static decimal manholeInfoSize3 = 1;
+        public static decimal manholeInfoSizeMaster = 1;
+        //Manhole
+        public static void manholeInfoSize(decimal x, decimal y, decimal z)
+        {
+            manholeInfoSize1 = x;
+            manholeInfoSize2 = y;
+            manholeInfoSize3 = z;
+        }
+        public static void manholeMasterScale(decimal master)
+        {
+            manholeInfoSizeMaster = master;
+        }
+        public static decimal manholeInfoPoint1 = Convert.ToDecimal(MainForm.hex2Float(MainForm.manholePoint[0]));
+        public static decimal manholeInfoPoint2 = Convert.ToDecimal(MainForm.hex2Float(MainForm.manholePoint[1]));
+        public static decimal manholeInfoPoint3 = Convert.ToDecimal(MainForm.hex2Float(MainForm.manholePoint[2]));
+
+        public static void manholeInfoPoint(decimal x, decimal y, decimal z)
+        {
+            manholeInfoPoint1 = x;
+            manholeInfoPoint2 = y;
+            manholeInfoPoint3 = z;
         }
     }
 }

@@ -1,12 +1,12 @@
 # PlazaToon for Splatoon 2.12.0
 
 <p align="center">
-  <img src="http://i.imgur.com/MO3ZQ13.png" alt="PlazaToon Image"/>
+  <img src="http://i.imgur.com/rbE7TwV.png" alt="PlazaToon Image"/>
 </p>
 
 [Downloads](https://github.com/yahya14/PlazaToon/releases/latest) | [Splatoon Modding Hub](http://gbatemp.net/threads/splatoon-modding-hub.425670/)
 
-**Important note: This tool is still in beta. Many of the bugs still needs to be squashed and still needs some sort of crash prevention.**
+**Important note: Despite many of the bugs have been fixed, the tool still needs a sort of crash prevention in the program.**
 
 PlazaToon is a tool that lets you freely change the size and locations of different NPCs in the plaza with much more ease and freedom. This can also be done by modifying the byamls in the splatoon game files, but to make things easier, this tool modifies them in ram via TCPGecko connection.
 
@@ -16,6 +16,8 @@ So lets talk about moving addresses for a bit. In this situation, the NPC's addr
 
 Also make sure that you disconnect the tool if you want to go online, if by chance you change a value in the tool during a match, your game will likely crash.
 
+**NEW:** With the new Geckiine support, you would see that the recalculate button will differ in colour depending on which one you are using. Light blue indicates that you're loading loadiine addresses, while dark blue is loading geckiine's.
+
 ##Usage
 
 ###Requirements
@@ -23,11 +25,9 @@ Also make sure that you disconnect the tool if you want to go online, if by chan
 + Windows Vista or higher (Mac and Linux users, use Wine)
 + [.NET Framework 4.5.2](http://go.microsoft.com/fwlink/?LinkId=328843)
 + Splatoon with version 2.12.0
-+ TCPGecko (Only supports loadiine.ovh at the moment)
++ TCPGecko + kernel on the Wii U (Supports both Loadiine and Geckiine)
 
 ###How to use it
-
-**Note:** Some of the features still needs re-design to make it easier to use for everyone.
 
 When launching the program, enter you Wii U's local IP in the entry box then click the connect button. The button will tranform into a blue *Recalculate* button, which also indicates that you're conected and the addresses are calculated for use. Remember that to always click the blue button after *every* loading screen.
 
@@ -42,6 +42,8 @@ To select an NPC of your choice, click the drop down where it shows Callie. So f
 + Judd
 + Spyke
 + Tree
++ Arcade **NEW**
++ Manhole **NEW**
 
 ####Scaling their size
 
@@ -59,6 +61,12 @@ Lastly, the *master scale with dark blue numbers* can change their size on all o
 
 To change their location, the *number boxes with red numbers* can be changed left/right, up/down, and forward/backward, respectively with the traditional (x,y,z) coordinate design. Small note, the x- and z-axis are inverted, which means that negative numbers actually means forward (in this case for the plaza *[even if this program is only meant for the plaza...ayyy]*).
 
-##What to expect
+####**NEW** Reset all sizes and locations
 
-This is only an early release of the tool, so expect more things to come in the near future such as more NPCs and the awaited gekiine support. In the meantime, stay tuned and have fun!
+On the top left of the program, there's an options tab that leads you to the *Reset All* button. This will reset all your cutrent settings back to default. It's there for you if everything is all messed up for some silly reason.
+
+##Credits
+
+Special thanks to all for their useful stuff; Chadderz, Amibu, Lean, Splatonka, and CosmoCortney.
+
+If it weren't for them, I wouldn't be able to make this in the first place.
