@@ -55,6 +55,8 @@ To change their size, the *number boxes with light blue numbers*, respectively l
 
 Small note that the box with labels like *X* and *X 2* are basically the axis in two parts, because Nintendo designed it that way in ram. Oddly, Some of their NPCs still use the regular (x,y,z) scales, like you see with judd, which is seemingly easier to deal with.
 
+**NEW:** If you find it difficult to change the two seperate parts of the x- and z- axis, the checkbox below will allow them to be synced together and you can start changing them as one. This is unchecked at default.
+
 Lastly, the *master scale with dark blue numbers* can change their size on all of its axis, so making them proportionally big (or smaller) wouldn't be stressful.
 
 ####Coordinating their location
