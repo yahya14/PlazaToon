@@ -22,23 +22,36 @@ namespace PlazaToon
         public static uint triparamSizeDefault = 0x3F800000;
 
         //arrays
-        public static uint[] marieSize = new uint[9]        { 0x3EFA4D62, 0x80000000, 0xBF5F52B5, 0, 0x3F800000, 0x80000000, 0x3F5F52B5, 0, 0x3EFA4D62 };
-        public static uint[] mariechairSize = new uint[9]   { 0x3EFA4D5D, 0, 0x3F5F52B4, 0x80000000, 0x3F800000, 0, 0xBF5F52B4, 0x80000000, 0x3EFA4D5D };
-        public static uint[] callieSize = new uint[9]       { 0x3F7490F0, 0x80000000, 0xBE974E63, 0, 0x3F800000, 0x80000000, 0x3E974E63, 0, 0x3F7490F0 };
-        public static uint[] calliechairSize = new uint[9]  { 0x3F7490F0, 0, 0x3E974E64, 0x80000000, 0x3F800000, 0, 0xBE974E64, 0x80000000, 0x3F7490F0 };
-        public static uint[] spykeSize = new uint[9]        { 0x3F2EA60F, 0, 0x3F3B2C5C, 0x80000000, 0x3F800000, 0, 0xBF3B2C5C, 0x80000000, 0x3F2EA60F };
-        public static uint[] arcadeSize = new uint[9]       { 0xBE882C60, 0x80000000, 0xBF76C799, 0, 0x3F800000, 0x80000000, 0x3F76C799, 0, 0xBE882C60 };
-        //public static uint[] treeSize = new uint[3]         { 0x3F800000, 0x3F800000, 0x3F800000 };
-        //public static uint[] juddSize = new uint[3]         { 0x3F800000, 0x3F800000, 0x3F800000 };
+        public static uint[] amiiboSize = new uint[9]       { 0xBF4201FA, 0, 0x3F270623, 0, 0x3F800000, 0, 0xBF270623, 0, 0xBF4201FA };
+        public static uint[] balloonSize = new uint[9]      { 0x3F776556, 0, 0xBEAF1D43, 0, 0x3F800000, 0, 0x3EAF1D43, 0, 0x3F776556 };
+        public static uint[] postSize = new uint[9]         { 0x3F708FB2, 0, 0x3F270623, 0, 0x3F800000, 0, 0xBF270623, 0, 0x3F708FB2 };
+        public static uint[] weaponsignSize = new uint[9]   { 0x3F742779, 0, 0xBE99F1CE, 0, 0x3F800000, 0, 0x3E99F1CE, 0, 0x3F742779 };
+        public static uint[] shellSize = new uint[9]        { 0xBF5ADC22, 0, 0xBF04CD49, 0, 0x3F800000, 0, 0x3F04CD49, 0, 0xBF5ADC22 };
+        public static uint[] marieSize = new uint[9]        { 0x3EFA4D62, 0, 0xBE83A00A, 0, 0x3F800000, 0, 0x3E83A00A, 0, 0x3EFA4D62 };
+        public static uint[] mariechairSize = new uint[9]   { 0x3EFA4D5D, 0, 0x3F5F52B4, 0, 0x3F800000, 0, 0xBF5F52B4, 0, 0x3EFA4D5D };
+        public static uint[] callieSize = new uint[9]       { 0x3F7490F0, 0, 0xBE974E63, 0, 0x3F800000, 0, 0x3E974E63, 0, 0x3F7490F0 };
+        public static uint[] calliechairSize = new uint[9]  { 0x3F7490F0, 0, 0x3E974E64, 0, 0x3F800000, 0, 0xBE974E64, 0, 0x3F7490F0 };
+        public static uint[] spykeSize = new uint[9]        { 0x3F2EA60F, 0, 0x3F3B2C5C, 0, 0x3F800000, 0, 0xBF3B2C5C, 0, 0x3F2EA60F };
+        public static uint[] arcadeSize = new uint[9]       { 0xBE882C60, 0, 0xBF76C799, 0, 0x3F800000, 0, 0x3F76C799, 0, 0xBE882C60 };
+        //public static uint[] treeSize = new uint[3]       { 0x3F800000, 0x3F800000, 0x3F800000 };
+        //public static uint[] juddSize = new uint[3]       { 0x3F800000, 0x3F800000, 0x3F800000 };
 
-        public static uint[] calliePoint = new uint[3]    { 0x4372B58C, 0x42840000, 0xC3118F23 };
-        public static uint[] mariePoint = new uint[3]     { 0x4381775F, 0x42840000, 0xC305AC3A };
-        public static uint[] juddPoint = new uint[3]      { 0x422B2428, 0x3E4CCCC7, 0xC3788B42 };
-        public static uint[] spykePoint = new uint[3]     { 0x43C09762, 0x00000000, 0xC2FB6430 };
-        public static uint[] treePoint = new uint[3]      { 0xC31F9663, 0x00000000, 0x42E39610 };
-        public static uint[] arcadePoint = new uint[3]    { 0xC35546E2, 0x3DCCCCC7, 0x43152D36 };
-        public static uint[] manholePoint = new uint[3]   { 0x42FEDB3C, 0x3E99999A, 0xC366BFA6 };
-        public static uint[] originPoint = new uint[3]    { 0x00000000, 0x00000000, 0x00000000 };
+        public static uint[] amiiboPoint = new uint[3]     { 0x4374D200, 0x00000000, 0x437E9400 };
+        public static uint[] balloonPoint = new uint[3]    { 0xC328370C, 0x41300000, 0xC2612360 };
+        public static uint[] postPoint = new uint[3]       { 0xC24688B9, 0x00000000, 0xC379BC00 };
+        public static uint[] weaponsignPoint = new uint[3] { 0xC2E61AF8, 0x00000000, 0xC33DCB02 };
+        public static uint[] shellPoint = new uint[3]      { 0x43BF80FA, 0x00000000, 0xC2F35EC0 };
+        public static uint[] calliePoint = new uint[3]     { 0x4372B58C, 0x42840000, 0xC3118F23 };
+        public static uint[] mariePoint = new uint[3]      { 0x4381775F, 0x42840000, 0xC305AC3A };
+        public static uint[] juddPoint = new uint[3]       { 0x422B2428, 0x3E4CCCC7, 0xC3788B42 };
+        public static uint[] spykePoint = new uint[3]      { 0x43C09762, 0x00000000, 0xC2FB6430 };
+        public static uint[] treePoint = new uint[3]       { 0x4389D236, 0x00000000, 0x42E39610 };
+        public static uint[] tree2Point = new uint[3]      { 0xC31F9663, 0x3FB80000, 0x43B6BB6E };
+        public static uint[] tree3Point = new uint[3]      { 0x43AE55BC, 0x3FC82E70, 0x43AEB932 };
+        public static uint[] tree4Point = new uint[3]      { 0x43D8DA7B, 0x40AA7A2F, 0x438A87D9 };
+        public static uint[] arcadePoint = new uint[3]     { 0xC35546E2, 0x3DCCCCC7, 0x43152D36 };
+        public static uint[] manholePoint = new uint[3]    { 0x42FEDB3C, 0x3E99999A, 0xC366BFA6 };
+        public static uint[] originPoint = new uint[3]     { 0x00000000, 0x00000000, 0x00000000 };
 
         public static uint[] NPCSizeAddr = new uint[9];
         public static uint[] NPCSizeData = new uint[9];
