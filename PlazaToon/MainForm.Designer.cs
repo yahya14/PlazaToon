@@ -137,9 +137,17 @@
             "Marie\'s Chair",
             "Judd",
             "Spyke",
-            "Tree",
+            "Sea Snails",
+            "Amiibo Box",
+            "Balloon",
+            "Miiverse Post",
+            "Tree 1",
+            "Tree 2",
+            "Tree 3",
+            "Tree 4",
             "Arcade",
-            "Manhole"});
+            "Manhole",
+            "Weapon Sign"});
             this.NPCcomboBox.Location = new System.Drawing.Point(10, 20);
             this.NPCcomboBox.Name = "NPCcomboBox";
             this.NPCcomboBox.Size = new System.Drawing.Size(141, 21);
@@ -669,7 +677,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "PlazaToon v0.3";
+            this.Text = "PlazaToon v0.4";
             this.TCPBox.ResumeLayout(false);
             this.TCPBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

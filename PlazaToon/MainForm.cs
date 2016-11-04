@@ -14,10 +14,8 @@ namespace PlazaToon
     public partial class MainForm : Form
     {
         private uint sistersAddr;
-        private uint chairsAddr;
+        private uint NPCAddr;
         private uint spykeAddr;
-        private uint treeAddr;
-        private uint trainAddr;
         private uint manholeAddr;
         public static uint triparamSizeDefault = 0x3F800000;
 
@@ -45,8 +43,8 @@ namespace PlazaToon
         public static uint[] mariePoint = new uint[3]      { 0x4381775F, 0x42840000, 0xC305AC3A };
         public static uint[] juddPoint = new uint[3]       { 0x422B2428, 0x3E4CCCC7, 0xC3788B42 };
         public static uint[] spykePoint = new uint[3]      { 0x43C09762, 0x00000000, 0xC2FB6430 };
-        public static uint[] treePoint = new uint[3]       { 0x4389D236, 0x00000000, 0x42E39610 };
-        public static uint[] tree2Point = new uint[3]      { 0xC31F9663, 0x3FB80000, 0x43B6BB6E };
+        public static uint[] treePoint = new uint[3]       { 0xC31F9663, 0x00000000, 0x42E39610 };
+        public static uint[] tree2Point = new uint[3]      { 0x4389D236, 0x3FB80000, 0x43B6BB6E };
         public static uint[] tree3Point = new uint[3]      { 0x43AE55BC, 0x3FC82E70, 0x43AEB932 };
         public static uint[] tree4Point = new uint[3]      { 0x43D8DA7B, 0x40AA7A2F, 0x438A87D9 };
         public static uint[] arcadePoint = new uint[3]     { 0xC35546E2, 0x3DCCCCC7, 0x43152D36 };
@@ -115,7 +113,6 @@ namespace PlazaToon
                     return;
                 }
                 var check = gecko.peek(0x1CAAAC50);
-                
                 if (check == 0) //Geckiine
                 {
                     diff = 0x4C0;
@@ -152,9 +149,8 @@ namespace PlazaToon
         {
             sistersAddr = gecko.peek(0x1CAAAC50 - diff);
             manholeAddr = gecko.peek(0x1CAAAE68 - diff);
-            chairsAddr = gecko.peek(0x1CAAAE70 - diff);
+            NPCAddr = gecko.peek(0x1CAAAE70 - diff);
             spykeAddr = gecko.peek(0x1CAAAE78 - diff);
-            treeAddr = gecko.peek(chairsAddr - 0x4F40);
         }
         private void IPBox_KeyDown(object sender, KeyEventArgs e) //User can press Enter to connect
         {
@@ -195,15 +191,15 @@ namespace PlazaToon
                 gecko.poke(sistersAddr + 0x344, calliePoint[1]);
                 gecko.poke(sistersAddr + 0x354, calliePoint[2]);
                 //Callie's Chair
-                gecko.poke(chairsAddr + 0x6BC, calliechairSize[0]);
-                gecko.poke(chairsAddr + 0x6C4, calliechairSize[2]);
-                gecko.poke(chairsAddr + 0x6CC, calliechairSize[4]);
-                gecko.poke(chairsAddr + 0x6D4, calliechairSize[6]);
-                gecko.poke(chairsAddr + 0x6DC, calliechairSize[8]);
+                gecko.poke(NPCAddr + 0x6BC, calliechairSize[0]);
+                gecko.poke(NPCAddr + 0x6C4, calliechairSize[2]);
+                gecko.poke(NPCAddr + 0x6CC, calliechairSize[4]);
+                gecko.poke(NPCAddr + 0x6D4, calliechairSize[6]);
+                gecko.poke(NPCAddr + 0x6DC, calliechairSize[8]);
 
-                gecko.poke(chairsAddr + 0x6E0, calliePoint[0]);
-                gecko.poke(chairsAddr + 0x6E4, calliePoint[1]);
-                gecko.poke(chairsAddr + 0x6E8, calliePoint[2]);
+                gecko.poke(NPCAddr + 0x6E0, calliePoint[0]);
+                gecko.poke(NPCAddr + 0x6E4, calliePoint[1]);
+                gecko.poke(NPCAddr + 0x6E8, calliePoint[2]);
                 //Marie
                 gecko.poke(sistersAddr + 0x7BC, marieSize[0]);
                 gecko.poke(sistersAddr + 0x7C4, marieSize[2]);
@@ -215,23 +211,23 @@ namespace PlazaToon
                 gecko.poke(sistersAddr + 0x7D8, mariePoint[1]);
                 gecko.poke(sistersAddr + 0x7E8, mariePoint[2]);
                 //Marie's Chair
-                gecko.poke(chairsAddr + 0xAC0, mariechairSize[0]);
-                gecko.poke(chairsAddr + 0xAC8, mariechairSize[2]);
-                gecko.poke(chairsAddr + 0xAD0, mariechairSize[4]);
-                gecko.poke(chairsAddr + 0xAD8, mariechairSize[6]);
-                gecko.poke(chairsAddr + 0xAE0, mariechairSize[8]);
+                gecko.poke(NPCAddr + 0xAC0, mariechairSize[0]);
+                gecko.poke(NPCAddr + 0xAC8, mariechairSize[2]);
+                gecko.poke(NPCAddr + 0xAD0, mariechairSize[4]);
+                gecko.poke(NPCAddr + 0xAD8, mariechairSize[6]);
+                gecko.poke(NPCAddr + 0xAE0, mariechairSize[8]);
 
-                gecko.poke(chairsAddr + 0xAE4, mariePoint[0]);
-                gecko.poke(chairsAddr + 0xAE8, mariePoint[1]);
-                gecko.poke(chairsAddr + 0xAEC, mariePoint[2]);
+                gecko.poke(NPCAddr + 0xAE4, mariePoint[0]);
+                gecko.poke(NPCAddr + 0xAE8, mariePoint[1]);
+                gecko.poke(NPCAddr + 0xAEC, mariePoint[2]);
                 //Judd
-                gecko.poke(chairsAddr - 0xE44, triparamSizeDefault);
-                gecko.poke(chairsAddr - 0xE34, triparamSizeDefault);
-                gecko.poke(chairsAddr - 0xE24, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0xE44, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0xE34, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0xE24, triparamSizeDefault);
 
-                gecko.poke(chairsAddr - 0xE20, juddPoint[0]);
-                gecko.poke(chairsAddr - 0xE1C, juddPoint[1]);
-                gecko.poke(chairsAddr - 0xE18, juddPoint[2]);
+                gecko.poke(NPCAddr - 0xE20, juddPoint[0]);
+                gecko.poke(NPCAddr - 0xE1C, juddPoint[1]);
+                gecko.poke(NPCAddr - 0xE18, juddPoint[2]);
                 //Spyke
                 gecko.poke(spykeAddr - 0x538, spykeSize[0]);
                 gecko.poke(spykeAddr - 0x530, spykeSize[2]);
@@ -242,24 +238,88 @@ namespace PlazaToon
                 gecko.poke(spykeAddr - 0x514, spykePoint[0]);
                 gecko.poke(spykeAddr - 0x510, spykePoint[1]);
                 gecko.poke(spykeAddr - 0x50C, spykePoint[2]);
+                //Sea Snails
+                gecko.poke(NPCAddr - 0x6798, shellSize[0]);
+                gecko.poke(NPCAddr - 0x6790, shellSize[2]);
+                gecko.poke(NPCAddr - 0x6788, shellSize[4]);
+                gecko.poke(NPCAddr - 0x6780, shellSize[6]);
+                gecko.poke(NPCAddr - 0x6778, shellSize[8]);
+
+                gecko.poke(NPCAddr - 0x6774, shellPoint[0]);
+                gecko.poke(NPCAddr - 0x6770, shellPoint[1]);
+                gecko.poke(NPCAddr - 0x676C, shellPoint[2]);
+                //Amiibo Box
+                gecko.poke(NPCAddr - 0x608, amiiboSize[0]);
+                gecko.poke(NPCAddr - 0x600, amiiboSize[2]);
+                gecko.poke(NPCAddr - 0x5F8, amiiboSize[4]);
+                gecko.poke(NPCAddr - 0x5F0, amiiboSize[6]);
+                gecko.poke(NPCAddr - 0x5E8, amiiboSize[8]);
+
+                gecko.poke(NPCAddr - 0x5E4, amiiboPoint[0]);
+                gecko.poke(NPCAddr - 0x5E0, amiiboPoint[1]);
+                gecko.poke(NPCAddr - 0x5DC, amiiboPoint[2]);
+                //Balloon
+                gecko.poke(NPCAddr - 0x90D8, balloonSize[0]);
+                gecko.poke(NPCAddr - 0x90D0, balloonSize[2]);
+                gecko.poke(NPCAddr - 0x90C8, balloonSize[4]);
+                gecko.poke(NPCAddr - 0x90C0, balloonSize[6]);
+                gecko.poke(NPCAddr - 0x90B8, balloonSize[8]);
+
+                gecko.poke(NPCAddr - 0x90B4, balloonPoint[0]);
+                gecko.poke(NPCAddr - 0x90B0, balloonPoint[1]);
+                gecko.poke(NPCAddr - 0x90AC, balloonPoint[2]);
+                //Miiverse Post
+                gecko.poke(NPCAddr - 0x1884, postSize[0]);
+                gecko.poke(NPCAddr - 0x187C, postSize[2]);
+                gecko.poke(NPCAddr - 0x1874, postSize[4]);
+                gecko.poke(NPCAddr - 0x186C, postSize[6]);
+                gecko.poke(NPCAddr - 0x1864, postSize[8]);
+
+                gecko.poke(NPCAddr - 0x1860, postPoint[0]);
+                gecko.poke(NPCAddr - 0x185C, postPoint[1]);
+                gecko.poke(NPCAddr - 0x1858, postPoint[2]);
                 //Tree
-                gecko.poke(treeAddr + 0x3754, triparamSizeDefault);
-                gecko.poke(treeAddr + 0x3744, triparamSizeDefault);
-                gecko.poke(treeAddr + 0x3734, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x8688, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x8678, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x8658, triparamSizeDefault);
 
-                gecko.poke(treeAddr - 0x3730, treePoint[0]);
-                gecko.poke(treeAddr - 0x372C, treePoint[1]);
-                gecko.poke(treeAddr - 0x3728, treePoint[2]);
+                gecko.poke(NPCAddr - 0x8664, treePoint[0]);
+                gecko.poke(NPCAddr - 0x8660, treePoint[1]);
+                gecko.poke(NPCAddr - 0x865C, treePoint[2]);
+                //Tree 2
+                gecko.poke(NPCAddr - 0x7C38, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x7C28, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x7C18, triparamSizeDefault);
+
+                gecko.poke(NPCAddr - 0x7C14, tree2Point[0]);
+                gecko.poke(NPCAddr - 0x7C10, tree2Point[1]);
+                gecko.poke(NPCAddr - 0x7C0C, tree2Point[2]);
+                //Tree 3
+                gecko.poke(NPCAddr - 0x5D48, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x5D38, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x5D28, triparamSizeDefault);
+
+                gecko.poke(NPCAddr - 0x5D24, tree3Point[0]);
+                gecko.poke(NPCAddr - 0x5D20, tree3Point[1]);
+                gecko.poke(NPCAddr - 0x5D1C, tree3Point[2]);
+                //Tree 4
+                gecko.poke(NPCAddr - 0x52F8, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x52E8, triparamSizeDefault);
+                gecko.poke(NPCAddr - 0x52D8, triparamSizeDefault);
+
+                gecko.poke(NPCAddr - 0x52D4, tree4Point[0]);
+                gecko.poke(NPCAddr - 0x52D0, tree4Point[1]);
+                gecko.poke(NPCAddr - 0x52CC, tree4Point[2]);
                 //Arcade
-                gecko.poke(chairsAddr + 0x140, arcadeSize[0]);
-                gecko.poke(chairsAddr + 0x148, arcadeSize[2]);
-                gecko.poke(chairsAddr + 0x150, arcadeSize[4]);
-                gecko.poke(chairsAddr + 0x158, arcadeSize[6]);
-                gecko.poke(chairsAddr + 0x160, arcadeSize[8]);
+                gecko.poke(NPCAddr + 0x140, arcadeSize[0]);
+                gecko.poke(NPCAddr + 0x148, arcadeSize[2]);
+                gecko.poke(NPCAddr + 0x150, arcadeSize[4]);
+                gecko.poke(NPCAddr + 0x158, arcadeSize[6]);
+                gecko.poke(NPCAddr + 0x160, arcadeSize[8]);
 
-                gecko.poke(chairsAddr + 0x164, arcadePoint[0]);
-                gecko.poke(chairsAddr + 0x168, arcadePoint[1]);
-                gecko.poke(chairsAddr + 0x16C, arcadePoint[2]);
+                gecko.poke(NPCAddr + 0x164, arcadePoint[0]);
+                gecko.poke(NPCAddr + 0x168, arcadePoint[1]);
+                gecko.poke(NPCAddr + 0x16C, arcadePoint[2]);
                 //Manhole
                 gecko.poke(manholeAddr - 0x6FC, triparamSizeDefault);
                 gecko.poke(manholeAddr - 0x6EC, triparamSizeDefault);
@@ -268,11 +328,22 @@ namespace PlazaToon
                 gecko.poke(manholeAddr - 0x6D8, manholePoint[0]);
                 gecko.poke(manholeAddr - 0x6D4, manholePoint[1]);
                 gecko.poke(manholeAddr - 0x6D0, manholePoint[2]);
+                //Weapon sign
+                gecko.poke(NPCAddr - 0x71E8, weaponsignSize[0]);
+                gecko.poke(NPCAddr - 0x71E0, weaponsignSize[2]);
+                gecko.poke(NPCAddr - 0x71D8, weaponsignSize[4]);
+                gecko.poke(NPCAddr - 0x71D0, weaponsignSize[6]);
+                gecko.poke(NPCAddr - 0x71C8, weaponsignSize[8]);
+
+                gecko.poke(NPCAddr - 0x71C4, weaponsignPoint[0]);
+                gecko.poke(NPCAddr - 0x71C0, weaponsignPoint[1]);
+                gecko.poke(NPCAddr - 0x71BC, weaponsignPoint[2]);
             }
             else if (confirmResult == DialogResult.No) { }
             else
             {
                 MessageBox.Show("Size and location has not been resetted.", "Reset All Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                
             }
         }
         private void recalcTimer_Tick(object sender, EventArgs e) //displays that addresses have been recalculated
@@ -306,14 +377,14 @@ namespace PlazaToon
                 NPCSizeData[2] = calliechairSize[4];
                 NPCSizeData[3] = calliechairSize[6];
                 NPCSizeData[4] = calliechairSize[8];
-                NPCSizeAddr[0] = chairsAddr + 0x6BC;
-                NPCSizeAddr[1] = chairsAddr + 0x6C4;
-                NPCSizeAddr[2] = chairsAddr + 0x6CC;
-                NPCSizeAddr[3] = chairsAddr + 0x6D4;
-                NPCSizeAddr[4] = chairsAddr + 0x6DC;
-                NPCPointData[0] = chairsAddr + 0x6E0;
-                NPCPointData[1] = chairsAddr + 0x6E4;
-                NPCPointData[2] = chairsAddr + 0x6E8;
+                NPCSizeAddr[0] = NPCAddr + 0x6BC;
+                NPCSizeAddr[1] = NPCAddr + 0x6C4;
+                NPCSizeAddr[2] = NPCAddr + 0x6CC;
+                NPCSizeAddr[3] = NPCAddr + 0x6D4;
+                NPCSizeAddr[4] = NPCAddr + 0x6DC;
+                NPCPointData[0] = NPCAddr + 0x6E0;
+                NPCPointData[1] = NPCAddr + 0x6E4;
+                NPCPointData[2] = NPCAddr + 0x6E8;
             }
             else if (NPCcomboBox.Text == "Marie")
             {
@@ -339,26 +410,26 @@ namespace PlazaToon
                 NPCSizeData[2] = mariechairSize[4];
                 NPCSizeData[3] = mariechairSize[6];
                 NPCSizeData[4] = mariechairSize[8];
-                NPCSizeAddr[0] = chairsAddr + 0xAC0;
-                NPCSizeAddr[1] = chairsAddr + 0xAC8;
-                NPCSizeAddr[2] = chairsAddr + 0xAD0;
-                NPCSizeAddr[3] = chairsAddr + 0xAD8;
-                NPCSizeAddr[4] = chairsAddr + 0xAE0;
-                NPCPointData[0] = chairsAddr + 0xAE4;
-                NPCPointData[1] = chairsAddr + 0xAE8;
-                NPCPointData[2] = chairsAddr + 0xAEC;
+                NPCSizeAddr[0] = NPCAddr + 0xAC0;
+                NPCSizeAddr[1] = NPCAddr + 0xAC8;
+                NPCSizeAddr[2] = NPCAddr + 0xAD0;
+                NPCSizeAddr[3] = NPCAddr + 0xAD8;
+                NPCSizeAddr[4] = NPCAddr + 0xAE0;
+                NPCPointData[0] = NPCAddr + 0xAE4;
+                NPCPointData[1] = NPCAddr + 0xAE8;
+                NPCPointData[2] = NPCAddr + 0xAEC;
             }
             else if (NPCcomboBox.Text == "Judd")
             {
                 NPCSizeData[0] = triparamSizeDefault;
                 NPCSizeData[2] = triparamSizeDefault;
                 NPCSizeData[3] = triparamSizeDefault;
-                NPCSizeAddr[0] = chairsAddr - 0xE44;
-                NPCSizeAddr[2] = chairsAddr - 0xE34;
-                NPCSizeAddr[3] = chairsAddr - 0xE24;
-                NPCPointData[0] = chairsAddr - 0xE20;
-                NPCPointData[1] = chairsAddr - 0xE1C;
-                NPCPointData[2] = chairsAddr - 0xE18;
+                NPCSizeAddr[0] = NPCAddr - 0xE44;
+                NPCSizeAddr[2] = NPCAddr - 0xE34;
+                NPCSizeAddr[3] = NPCAddr - 0xE24;
+                NPCPointData[0] = NPCAddr - 0xE20;
+                NPCPointData[1] = NPCAddr - 0xE1C;
+                NPCPointData[2] = NPCAddr - 0xE18;
 
             }
             else if (NPCcomboBox.Text == "Spyke")
@@ -377,17 +448,117 @@ namespace PlazaToon
                 NPCPointData[1] = spykeAddr - 0x510;
                 NPCPointData[2] = spykeAddr - 0x50C;
             }
-            else if (NPCcomboBox.Text == "Tree")
+            else if (NPCcomboBox.Text == "Sea Snails")
+            {
+                NPCSizeData[0] = shellSize[0];
+                NPCSizeData[1] = shellSize[2];
+                NPCSizeData[2] = shellSize[4];
+                NPCSizeData[3] = shellSize[6];
+                NPCSizeData[4] = shellSize[8];
+                NPCSizeAddr[0] = NPCAddr - 0x6798;
+                NPCSizeAddr[1] = NPCAddr - 0x6790;
+                NPCSizeAddr[2] = NPCAddr - 0x6788;
+                NPCSizeAddr[3] = NPCAddr - 0x6780;
+                NPCSizeAddr[4] = NPCAddr - 0x6778;
+                NPCPointData[0] = NPCAddr - 0x6774;
+                NPCPointData[1] = NPCAddr - 0x6770;
+                NPCPointData[2] = NPCAddr - 0x676C;
+            }
+            else if (NPCcomboBox.Text == "Amiibo Box")
+            {
+                NPCSizeData[0] = amiiboSize[0];
+                NPCSizeData[1] = amiiboSize[2];
+                NPCSizeData[2] = amiiboSize[4];
+                NPCSizeData[3] = amiiboSize[6];
+                NPCSizeData[4] = amiiboSize[8];
+                NPCSizeAddr[0] = NPCAddr - 0x608;
+                NPCSizeAddr[1] = NPCAddr - 0x600;
+                NPCSizeAddr[2] = NPCAddr - 0x5F8;
+                NPCSizeAddr[3] = NPCAddr - 0x5F0;
+                NPCSizeAddr[4] = NPCAddr - 0x5E8;
+                NPCPointData[0] = NPCAddr - 0x5E4;
+                NPCPointData[1] = NPCAddr - 0x5E0;
+                NPCPointData[2] = NPCAddr - 0x5DC;
+            }
+            else if (NPCcomboBox.Text == "Balloon")
+            {
+                NPCSizeData[0] = balloonSize[0];
+                NPCSizeData[1] = balloonSize[2];
+                NPCSizeData[2] = balloonSize[4];
+                NPCSizeData[3] = balloonSize[6];
+                NPCSizeData[4] = balloonSize[8];
+                NPCSizeAddr[0] = NPCAddr - 0x90D8;
+                NPCSizeAddr[1] = NPCAddr - 0x90D0;
+                NPCSizeAddr[2] = NPCAddr - 0x90C8;
+                NPCSizeAddr[3] = NPCAddr - 0x90C0;
+                NPCSizeAddr[4] = NPCAddr - 0x90B8;
+                NPCPointData[0] = NPCAddr - 0x90B4;
+                NPCPointData[1] = NPCAddr - 0x90B0;
+                NPCPointData[2] = NPCAddr - 0x90AC;
+            }
+            else if (NPCcomboBox.Text == "Miiverse Post")
+            {
+                NPCSizeData[0] = postSize[0];
+                NPCSizeData[1] = postSize[2];
+                NPCSizeData[2] = postSize[4];
+                NPCSizeData[3] = postSize[6];
+                NPCSizeData[4] = postSize[8];
+                NPCSizeAddr[0] = NPCAddr - 0x1884;
+                NPCSizeAddr[1] = NPCAddr - 0x187C;
+                NPCSizeAddr[2] = NPCAddr - 0x1874;
+                NPCSizeAddr[3] = NPCAddr - 0x186C;
+                NPCSizeAddr[4] = NPCAddr - 0x1864;
+                NPCPointData[0] = NPCAddr - 0x1860;
+                NPCPointData[1] = NPCAddr - 0x185C;
+                NPCPointData[2] = NPCAddr - 0x1858;
+            }
+            else if (NPCcomboBox.Text == "Tree 1")
             {
                 NPCSizeData[0] = triparamSizeDefault;
                 NPCSizeData[2] = triparamSizeDefault;
                 NPCSizeData[3] = triparamSizeDefault;
-                NPCSizeAddr[0] = treeAddr - 0x3754;
-                NPCSizeAddr[2] = treeAddr - 0x3744;
-                NPCSizeAddr[3] = treeAddr - 0x3734;
-                NPCPointData[0] = treeAddr - 0x3730;
-                NPCPointData[1] = treeAddr - 0x372C;
-                NPCPointData[2] = treeAddr - 0x3728;
+                NPCSizeAddr[0] = NPCAddr - 0x8688;
+                NPCSizeAddr[2] = NPCAddr - 0x8678;
+                NPCSizeAddr[3] = NPCAddr - 0x8668;
+                NPCPointData[0] = NPCAddr - 0x8664;
+                NPCPointData[1] = NPCAddr - 0x8660;
+                NPCPointData[2] = NPCAddr - 0x865C;
+            }
+            else if (NPCcomboBox.Text == "Tree 2")
+            {
+                NPCSizeData[0] = triparamSizeDefault;
+                NPCSizeData[2] = triparamSizeDefault;
+                NPCSizeData[3] = triparamSizeDefault;
+                NPCSizeAddr[0] = NPCAddr - 0x7C38;
+                NPCSizeAddr[2] = NPCAddr - 0x7C28;
+                NPCSizeAddr[3] = NPCAddr - 0x7C18;
+                NPCPointData[0] = NPCAddr - 0x7C14;
+                NPCPointData[1] = NPCAddr - 0x7C10;
+                NPCPointData[2] = NPCAddr - 0x7C0C;
+            }
+            else if (NPCcomboBox.Text == "Tree 3")
+            {
+                NPCSizeData[0] = triparamSizeDefault;
+                NPCSizeData[2] = triparamSizeDefault;
+                NPCSizeData[3] = triparamSizeDefault;
+                NPCSizeAddr[0] = NPCAddr - 0x5D48;
+                NPCSizeAddr[2] = NPCAddr - 0x5D38;
+                NPCSizeAddr[3] = NPCAddr - 0x5D28;
+                NPCPointData[0] = NPCAddr - 0x5D24;
+                NPCPointData[1] = NPCAddr - 0x5D20;
+                NPCPointData[2] = NPCAddr - 0x5D1C;
+            }
+            else if (NPCcomboBox.Text == "Tree 4")
+            {
+                NPCSizeData[0] = triparamSizeDefault;
+                NPCSizeData[2] = triparamSizeDefault;
+                NPCSizeData[3] = triparamSizeDefault;
+                NPCSizeAddr[0] = NPCAddr - 0x52F8;
+                NPCSizeAddr[2] = NPCAddr - 0x52E8;
+                NPCSizeAddr[3] = NPCAddr - 0x52D8;
+                NPCPointData[0] = NPCAddr - 0x52D4;
+                NPCPointData[1] = NPCAddr - 0x52D0;
+                NPCPointData[2] = NPCAddr - 0x52CC;
             }
             else if (NPCcomboBox.Text == "Arcade")
             {
@@ -396,14 +567,14 @@ namespace PlazaToon
                 NPCSizeData[2] = arcadeSize[4];
                 NPCSizeData[3] = arcadeSize[6];
                 NPCSizeData[4] = arcadeSize[8];
-                NPCSizeAddr[0] = chairsAddr + 0x140;
-                NPCSizeAddr[1] = chairsAddr + 0x148;
-                NPCSizeAddr[2] = chairsAddr + 0x150;
-                NPCSizeAddr[3] = chairsAddr + 0x158;
-                NPCSizeAddr[4] = chairsAddr + 0x160;
-                NPCPointData[0] = chairsAddr + 0x164;
-                NPCPointData[1] = chairsAddr + 0x168;
-                NPCPointData[2] = chairsAddr + 0x16C;
+                NPCSizeAddr[0] = NPCAddr + 0x140;
+                NPCSizeAddr[1] = NPCAddr + 0x148;
+                NPCSizeAddr[2] = NPCAddr + 0x150;
+                NPCSizeAddr[3] = NPCAddr + 0x158;
+                NPCSizeAddr[4] = NPCAddr + 0x160;
+                NPCPointData[0] = NPCAddr + 0x164;
+                NPCPointData[1] = NPCAddr + 0x168;
+                NPCPointData[2] = NPCAddr + 0x16C;
             }
             else if (NPCcomboBox.Text == "Manhole")
             {
@@ -416,6 +587,22 @@ namespace PlazaToon
                 NPCPointData[0] = manholeAddr - 0x6D8;
                 NPCPointData[1] = manholeAddr - 0x6D4;
                 NPCPointData[2] = manholeAddr - 0x6D0;
+            }
+            else if (NPCcomboBox.Text == "Weapon Sign")
+            {
+                NPCSizeData[0] = weaponsignSize[0];
+                NPCSizeData[1] = weaponsignSize[2];
+                NPCSizeData[2] = weaponsignSize[4];
+                NPCSizeData[3] = weaponsignSize[6];
+                NPCSizeData[4] = weaponsignSize[8];
+                NPCSizeAddr[0] = NPCAddr - 0x71E8;
+                NPCSizeAddr[1] = NPCAddr - 0x71E0;
+                NPCSizeAddr[2] = NPCAddr - 0x71D8;
+                NPCSizeAddr[3] = NPCAddr - 0x71D0;
+                NPCSizeAddr[4] = NPCAddr - 0x71C8;
+                NPCPointData[0] = NPCAddr - 0x71C4;
+                NPCPointData[1] = NPCAddr - 0x71C0;
+                NPCPointData[2] = NPCAddr - 0x71BC;
             }
         }
         private void numericBoxLoad() //where the numeric boxes are handled
@@ -499,16 +686,101 @@ namespace PlazaToon
                 locnumericUpDown2.Value = Info.spykeInfoPoint2;
                 locnumericUpDown3.Value = Info.spykeInfoPoint3;
             }
-            else if (NPCcomboBox.Text == "Tree")
+            else if (NPCcomboBox.Text == "Sea Snails")
             {
-                masternumericUpDown.Value = Info.treeInfoSizeMaster;
-                numericUpDown1.Value = Info.treeInfoSize1;
-                numericUpDown3.Value = Info.treeInfoSize2;
-                numericUpDown4.Value = Info.treeInfoSize3;
+                masternumericUpDown.Value = Info.shellInfoSizeMaster;
+                numericUpDown1.Value = Info.shellInfoSize1;
+                numericUpDown2.Value = Info.shellInfoSize2;
+                numericUpDown3.Value = Info.shellInfoSize3;
+                numericUpDown4.Value = Info.shellInfoSize4;
+                numericUpDown5.Value = Info.shellInfoSize5;
 
-                locnumericUpDown1.Value = Info.treeInfoPoint1;
-                locnumericUpDown2.Value = Info.treeInfoPoint2;
-                locnumericUpDown3.Value = Info.treeInfoPoint3;
+                locnumericUpDown1.Value = Info.shellInfoPoint1;
+                locnumericUpDown2.Value = Info.shellInfoPoint2;
+                locnumericUpDown3.Value = Info.shellInfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Amiibo Box")
+            {
+                masternumericUpDown.Value = Info.amiiboInfoSizeMaster;
+                numericUpDown1.Value = Info.amiiboInfoSize1;
+                numericUpDown2.Value = Info.amiiboInfoSize2;
+                numericUpDown3.Value = Info.amiiboInfoSize3;
+                numericUpDown4.Value = Info.amiiboInfoSize4;
+                numericUpDown5.Value = Info.amiiboInfoSize5;
+
+                locnumericUpDown1.Value = Info.amiiboInfoPoint1;
+                locnumericUpDown2.Value = Info.amiiboInfoPoint2;
+                locnumericUpDown3.Value = Info.amiiboInfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Balloon")
+            {
+                masternumericUpDown.Value = Info.balloonInfoSizeMaster;
+                numericUpDown1.Value = Info.balloonInfoSize1;
+                numericUpDown2.Value = Info.balloonInfoSize2;
+                numericUpDown3.Value = Info.balloonInfoSize3;
+                numericUpDown4.Value = Info.balloonInfoSize4;
+                numericUpDown5.Value = Info.balloonInfoSize5;
+
+                locnumericUpDown1.Value = Info.balloonInfoPoint1;
+                locnumericUpDown2.Value = Info.balloonInfoPoint2;
+                locnumericUpDown3.Value = Info.balloonInfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Miiverse Post")
+            {
+                masternumericUpDown.Value = Info.postInfoSizeMaster;
+                numericUpDown1.Value = Info.postInfoSize1;
+                numericUpDown2.Value = Info.postInfoSize2;
+                numericUpDown3.Value = Info.postInfoSize3;
+                numericUpDown4.Value = Info.postInfoSize4;
+                numericUpDown5.Value = Info.postInfoSize5;
+
+                locnumericUpDown1.Value = Info.postInfoPoint1;
+                locnumericUpDown2.Value = Info.postInfoPoint2;
+                locnumericUpDown3.Value = Info.postInfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Tree 1")
+            {
+                masternumericUpDown.Value = Info.tree1InfoSizeMaster;
+                numericUpDown1.Value = Info.tree1InfoSize1;
+                numericUpDown3.Value = Info.tree1InfoSize2;
+                numericUpDown4.Value = Info.tree1InfoSize3;
+
+                locnumericUpDown1.Value = Info.tree1InfoPoint1;
+                locnumericUpDown2.Value = Info.tree1InfoPoint2;
+                locnumericUpDown3.Value = Info.tree1InfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Tree 2")
+            {
+                masternumericUpDown.Value = Info.tree2InfoSizeMaster;
+                numericUpDown1.Value = Info.tree2InfoSize1;
+                numericUpDown3.Value = Info.tree2InfoSize2;
+                numericUpDown4.Value = Info.tree2InfoSize3;
+
+                locnumericUpDown1.Value = Info.tree2InfoPoint1;
+                locnumericUpDown2.Value = Info.tree2InfoPoint2;
+                locnumericUpDown3.Value = Info.tree2InfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Tree 3")
+            {
+                masternumericUpDown.Value = Info.tree3InfoSizeMaster;
+                numericUpDown1.Value = Info.tree3InfoSize1;
+                numericUpDown3.Value = Info.tree3InfoSize2;
+                numericUpDown4.Value = Info.tree3InfoSize3;
+
+                locnumericUpDown1.Value = Info.tree3InfoPoint1;
+                locnumericUpDown2.Value = Info.tree3InfoPoint2;
+                locnumericUpDown3.Value = Info.tree3InfoPoint3;
+            }
+            else if (NPCcomboBox.Text == "Tree 4")
+            {
+                masternumericUpDown.Value = Info.tree4InfoSizeMaster;
+                numericUpDown1.Value = Info.tree4InfoSize1;
+                numericUpDown3.Value = Info.tree4InfoSize2;
+                numericUpDown4.Value = Info.tree4InfoSize3;
+
+                locnumericUpDown1.Value = Info.tree4InfoPoint1;
+                locnumericUpDown2.Value = Info.tree4InfoPoint2;
+                locnumericUpDown3.Value = Info.tree4InfoPoint3;
             }
             else if (NPCcomboBox.Text == "Arcade")
             {
@@ -534,11 +806,24 @@ namespace PlazaToon
                 locnumericUpDown2.Value = Info.manholeInfoPoint2;
                 locnumericUpDown3.Value = Info.manholeInfoPoint3;
             }
+            else if (NPCcomboBox.Text == "Weapon Sign")
+            {
+                masternumericUpDown.Value = Info.weaponsignInfoSizeMaster;
+                numericUpDown1.Value = Info.weaponsignInfoSize1;
+                numericUpDown2.Value = Info.weaponsignInfoSize2;
+                numericUpDown3.Value = Info.weaponsignInfoSize3;
+                numericUpDown4.Value = Info.weaponsignInfoSize4;
+                numericUpDown5.Value = Info.weaponsignInfoSize5;
+
+                locnumericUpDown1.Value = Info.weaponsignInfoPoint1;
+                locnumericUpDown2.Value = Info.weaponsignInfoPoint2;
+                locnumericUpDown3.Value = Info.weaponsignInfoPoint3;
+            }
         }
         
         private void NPCcomboBox_SelectedIndexChanged(object sender, EventArgs e) //controls Enabled events
         {
-            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree" || NPCcomboBox.Text == "Manhole")
+            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree 1" || NPCcomboBox.Text == "Tree 2" || NPCcomboBox.Text == "Tree 3" || NPCcomboBox.Text == "Tree 4" || NPCcomboBox.Text == "Manhole")
             {
                 numericUpDown2.Enabled = false;
                 numericUpDown5.Enabled = false;
@@ -589,10 +874,49 @@ namespace PlazaToon
                 Info.spykeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
 
             }
-            else if (NPCcomboBox.Text == "Tree")
+            else if (NPCcomboBox.Text == "Sea Snails")
             {
-                Info.treeInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                Info.treeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                Info.shellInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
+                Info.shellInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+
+            }
+            else if (NPCcomboBox.Text == "Amiibo Box")
+            {
+                Info.amiiboInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
+                Info.amiiboInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+
+            }
+            else if (NPCcomboBox.Text == "Balloon")
+            {
+                Info.balloonInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
+                Info.balloonInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+
+            }
+            else if (NPCcomboBox.Text == "Miiverse Post")
+            {
+                Info.postInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
+                Info.postInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+
+            }
+            else if (NPCcomboBox.Text == "Tree 1")
+            {
+                Info.tree1InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
+                Info.tree1InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 2")
+            {
+                Info.tree2InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
+                Info.tree2InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 3")
+            {
+                Info.tree3InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
+                Info.tree3InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 4")
+            {
+                Info.tree4InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
+                Info.tree4InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
             }
             else if (NPCcomboBox.Text == "Arcade")
             {
@@ -604,6 +928,12 @@ namespace PlazaToon
             {
                 Info.manholeInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
                 Info.manholeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+            }
+            else if (NPCcomboBox.Text == "Weapon Sign")
+            {
+                Info.weaponsignInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
+                Info.weaponsignInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+
             }
         }
         private void masterScaleSav() //saves master scale values
@@ -632,9 +962,37 @@ namespace PlazaToon
             {
                 Info.spykeMasterScale(masternumericUpDown.Value);
             }
-            else if (NPCcomboBox.Text == "Tree")
+            else if (NPCcomboBox.Text == "Sea Snails")
             {
-                Info.treeMasterScale(masternumericUpDown.Value);
+                Info.shellMasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Amiibo Box")
+            {
+                Info.amiiboMasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Balloon")
+            {
+                Info.balloonMasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Miiverse Post")
+            {
+                Info.postMasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 1")
+            {
+                Info.tree1MasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 2")
+            {
+                Info.tree2MasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 3")
+            {
+                Info.tree3MasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Tree 4")
+            {
+                Info.tree4MasterScale(masternumericUpDown.Value);
             }
             else if (NPCcomboBox.Text == "Arcade")
             {
@@ -643,6 +1001,10 @@ namespace PlazaToon
             else if (NPCcomboBox.Text == "Manhole")
             {
                 Info.manholeMasterScale(masternumericUpDown.Value);
+            }
+            else if (NPCcomboBox.Text == "Weapon Sign")
+            {
+                Info.weaponsignMasterScale(masternumericUpDown.Value);
             }
         }
         //several size numeric boxes
@@ -705,7 +1067,7 @@ namespace PlazaToon
         //master numeric box
         private void masternumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree" || NPCcomboBox.Text == "Manhole")
+            if (NPCcomboBox.Text == "Judd" || NPCcomboBox.Text == "Tree 1" || NPCcomboBox.Text == "Tree 2" || NPCcomboBox.Text == "Tree 3" || NPCcomboBox.Text == "Tree 4" || NPCcomboBox.Text == "Manhole")
             {
                 numericUpDown1.Value = masternumericUpDown.Value;
                 numericUpDown4.Value = masternumericUpDown.Value;
