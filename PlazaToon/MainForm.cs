@@ -112,13 +112,13 @@ namespace PlazaToon
                     MessageBox.Show("Could not connect to TCPGecko.", "Connection failed", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     return;
                 }
-                var check = gecko.peek(0x1CAAAC50);
+                var check = gecko.peek(0x1CAA74BC);
                 if (check == 0) //Geckiine
                 {
                     diff = 0x4C0;
                     ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(120)))), ((int)(((byte)(210))))); //dark blue change indicating geckiine
                 }
-                else if (check != 0 && gecko.peek(0x12CE3DA0) != 0x000003F2) //Loadiine
+                else if (check == 0xFFFFFFFF && gecko.peek(0x12CE3DA0) != 0x000003F2) //Loadiine
                 {
                     diff = 0;
                     ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(145)))), ((int)(((byte)(245))))); //light blue change indicating Loadiine
