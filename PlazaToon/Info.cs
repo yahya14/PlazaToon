@@ -8,13 +8,19 @@ namespace PlazaToon
 {
     class Info
     {
+        public static TCPGecko gecko;
         public static float hex2Float(uint val) //uint to float converter from the joyous amibu
         {
             return BitConverter.ToSingle(BitConverter.GetBytes(val), 0);
         }
+        private static decimal vert(uint sweetdreams)
+        {
+            return Convert.ToDecimal(Main.hex2Float(sweetdreams));
+        }
         //RESET
         public static void resetti()
         {
+            gecko = Main.gecko;
             callieInfoSize(1, 1, 1, 1, 1);
             callieChairInfoSize(1, 1, 1, 1, 1);
             marieInfoSize(1, 1, 1, 1, 1);
@@ -22,6 +28,7 @@ namespace PlazaToon
             juddInfoSize(1, 1, 1);
             spykeInfoSize(1, 1, 1, 1, 1);
             shellInfoSize(1, 1, 1, 1, 1);
+            trainInfoSize(1, 1, 1);
             amiiboInfoSize(1, 1, 1, 1, 1);
             balloonInfoSize(1, 1, 1, 1, 1);
             postInfoSize(1, 1, 1, 1, 1);
@@ -40,6 +47,7 @@ namespace PlazaToon
             juddMasterScale(1);
             spykeMasterScale(1);
             shellMasterScale(1);
+            trainMasterScale(1);
             amiiboMasterScale(1);
             balloonMasterScale(1);
             postMasterScale(1);
@@ -51,23 +59,242 @@ namespace PlazaToon
             manholeMasterScale(1);
             weaponsignMasterScale(1);
 
-            callieInfoPoint(Convert.ToDecimal(hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(hex2Float(MainForm.calliePoint[1])),Convert.ToDecimal(hex2Float(MainForm.calliePoint[2])));
-            callieChairInfoPoint(Convert.ToDecimal(hex2Float(MainForm.calliePoint[0])), Convert.ToDecimal(hex2Float(MainForm.calliePoint[1])), Convert.ToDecimal(hex2Float(MainForm.calliePoint[2])));
-            marieInfoPoint(Convert.ToDecimal(hex2Float(MainForm.mariePoint[0])), Convert.ToDecimal(hex2Float(MainForm.mariePoint[1])), Convert.ToDecimal(hex2Float(MainForm.mariePoint[2])));
-            marieChairInfoPoint(Convert.ToDecimal(hex2Float(MainForm.mariePoint[0])), Convert.ToDecimal(hex2Float(MainForm.mariePoint[1])), Convert.ToDecimal(hex2Float(MainForm.mariePoint[2])));
-            juddInfoPoint(Convert.ToDecimal(hex2Float(MainForm.juddPoint[0])), Convert.ToDecimal(hex2Float(MainForm.juddPoint[1])), Convert.ToDecimal(hex2Float(MainForm.juddPoint[2])));
-            spykeInfoPoint(Convert.ToDecimal(hex2Float(MainForm.spykePoint[0])), Convert.ToDecimal(hex2Float(MainForm.spykePoint[1])), Convert.ToDecimal(hex2Float(MainForm.spykePoint[2])));
-            shellInfoPoint(Convert.ToDecimal(hex2Float(MainForm.shellPoint[0])), Convert.ToDecimal(hex2Float(MainForm.shellPoint[1])), Convert.ToDecimal(hex2Float(MainForm.shellPoint[2])));
-            amiiboInfoPoint(Convert.ToDecimal(hex2Float(MainForm.amiiboPoint[0])), Convert.ToDecimal(hex2Float(MainForm.amiiboPoint[1])), Convert.ToDecimal(hex2Float(MainForm.amiiboPoint[2])));
-            balloonInfoPoint(Convert.ToDecimal(hex2Float(MainForm.balloonPoint[0])), Convert.ToDecimal(hex2Float(MainForm.balloonPoint[1])), Convert.ToDecimal(hex2Float(MainForm.balloonPoint[2])));
-            postInfoPoint(Convert.ToDecimal(hex2Float(MainForm.postPoint[0])), Convert.ToDecimal(hex2Float(MainForm.postPoint[1])), Convert.ToDecimal(hex2Float(MainForm.postPoint[2])));
-            tree1InfoPoint(Convert.ToDecimal(hex2Float(MainForm.treePoint[0])), Convert.ToDecimal(hex2Float(MainForm.treePoint[1])), Convert.ToDecimal(hex2Float(MainForm.treePoint[2])));
-            tree2InfoPoint(Convert.ToDecimal(hex2Float(MainForm.tree2Point[0])), Convert.ToDecimal(hex2Float(MainForm.tree2Point[1])), Convert.ToDecimal(hex2Float(MainForm.tree2Point[2])));
-            tree3InfoPoint(Convert.ToDecimal(hex2Float(MainForm.tree3Point[0])), Convert.ToDecimal(hex2Float(MainForm.tree3Point[1])), Convert.ToDecimal(hex2Float(MainForm.tree3Point[2])));
-            tree4InfoPoint(Convert.ToDecimal(hex2Float(MainForm.tree4Point[0])), Convert.ToDecimal(hex2Float(MainForm.tree4Point[1])), Convert.ToDecimal(hex2Float(MainForm.tree4Point[2])));
-            arcadeInfoPoint(Convert.ToDecimal(hex2Float(MainForm.arcadePoint[0])), Convert.ToDecimal(hex2Float(MainForm.arcadePoint[1])), Convert.ToDecimal(hex2Float(MainForm.arcadePoint[2])));
-            manholeInfoPoint(Convert.ToDecimal(hex2Float(MainForm.manholePoint[0])), Convert.ToDecimal(hex2Float(MainForm.manholePoint[1])), Convert.ToDecimal(hex2Float(MainForm.manholePoint[2])));
-            weaponsignInfoPoint(Convert.ToDecimal(hex2Float(MainForm.weaponsignPoint[0])), Convert.ToDecimal(hex2Float(MainForm.weaponsignPoint[1])), Convert.ToDecimal(hex2Float(MainForm.weaponsignPoint[2])));
+            callieInfoPoint(vert(Main.calliePoint[0]),
+                vert(Main.calliePoint[1]),
+                vert(Main.calliePoint[2]));
+
+            callieChairInfoPoint(vert(Main.calliePoint[0]),
+                vert(Main.calliePoint[1]),
+                vert(Main.calliePoint[2]));
+
+            marieInfoPoint(vert(Main.mariePoint[0]),
+                vert(Main.mariePoint[1]),
+                vert(Main.mariePoint[2]));
+
+            marieChairInfoPoint(vert(Main.mariePoint[0]),
+                vert(Main.mariePoint[1]),
+                vert(Main.mariePoint[2]));
+
+            juddInfoPoint(vert(Main.juddPoint[0]),
+                vert(Main.juddPoint[1]),
+                vert(Main.juddPoint[2]));
+
+            spykeInfoPoint(vert(Main.spykePoint[0]),
+                vert(Main.spykePoint[1]),
+                vert(Main.spykePoint[2]));
+
+            shellInfoPoint(vert(Main.shellPoint[0]),
+                vert(Main.shellPoint[1]),
+                vert(Main.shellPoint[2]));
+
+            trainInfoPoint(0, 0, 0);
+
+            amiiboInfoPoint(vert(Main.amiiboPoint[0]),
+                vert(Main.amiiboPoint[1]),
+                vert(Main.amiiboPoint[2]));
+
+            balloonInfoPoint(vert(Main.balloonPoint[0]),
+                vert(Main.balloonPoint[1]),
+                vert(Main.balloonPoint[2]));
+
+            postInfoPoint(vert(Main.postPoint[0]),
+                vert(Main.postPoint[1]),
+                vert(Main.postPoint[2]));
+
+            tree1InfoPoint(vert(Main.treePoint[0]),
+                vert(Main.treePoint[1]),
+                vert(Main.treePoint[2]));
+
+            tree2InfoPoint(vert(Main.tree2Point[0]),
+                vert(Main.tree2Point[1]),
+                vert(Main.tree2Point[2]));
+
+            tree3InfoPoint(vert(Main.tree3Point[0]),
+                vert(Main.tree3Point[1]),
+                vert(Main.tree3Point[2]));
+
+            tree4InfoPoint(vert(Main.tree4Point[0]),
+                vert(Main.tree4Point[1]),
+                vert(Main.tree4Point[2]));
+
+            arcadeInfoPoint(vert(Main.arcadePoint[0]),
+                vert(Main.arcadePoint[1]),
+                vert(Main.arcadePoint[2]));
+
+            manholeInfoPoint(vert(Main.manholePoint[0]),
+                vert(Main.manholePoint[1]),
+                vert(Main.manholePoint[2]));
+
+            weaponsignInfoPoint(vert(Main.weaponsignPoint[0]),
+                vert(Main.weaponsignPoint[1]),
+                vert(Main.weaponsignPoint[2]));
+
+            //Callie
+            gecko.poke(Main.sistersAddr + 0x328, Main.callieSize[0]);
+            gecko.poke(Main.sistersAddr + 0x330, Main.callieSize[2]);
+            gecko.poke(Main.sistersAddr + 0x33C, Main.callieSize[4]);
+            gecko.poke(Main.sistersAddr + 0x348, Main.callieSize[6]);
+            gecko.poke(Main.sistersAddr + 0x350, Main.callieSize[8]);
+
+            gecko.poke(Main.sistersAddr + 0x334, Main.calliePoint[0]);
+            gecko.poke(Main.sistersAddr + 0x344, Main.calliePoint[1]);
+            gecko.poke(Main.sistersAddr + 0x354, Main.calliePoint[2]);
+            //Callie's Chair
+            gecko.poke(Main.NPCAddr + 0x6BC, Main.calliechairSize[0]);
+            gecko.poke(Main.NPCAddr + 0x6C4, Main.calliechairSize[2]);
+            gecko.poke(Main.NPCAddr + 0x6CC, Main.calliechairSize[4]);
+            gecko.poke(Main.NPCAddr + 0x6D4, Main.calliechairSize[6]);
+            gecko.poke(Main.NPCAddr + 0x6DC, Main.calliechairSize[8]);
+
+            gecko.poke(Main.NPCAddr + 0x6E0, Main.calliePoint[0]);
+            gecko.poke(Main.NPCAddr + 0x6E4, Main.calliePoint[1]);
+            gecko.poke(Main.NPCAddr + 0x6E8, Main.calliePoint[2]);
+            //Marie
+            gecko.poke(Main.sistersAddr + 0x7BC, Main.marieSize[0]);
+            gecko.poke(Main.sistersAddr + 0x7C4, Main.marieSize[2]);
+            gecko.poke(Main.sistersAddr + 0x7D0, Main.marieSize[4]);
+            gecko.poke(Main.sistersAddr + 0x7DC, Main.marieSize[6]);
+            gecko.poke(Main.sistersAddr + 0x7E4, Main.marieSize[8]);
+
+            gecko.poke(Main.sistersAddr + 0x7C8, Main.mariePoint[0]);
+            gecko.poke(Main.sistersAddr + 0x7D8, Main.mariePoint[1]);
+            gecko.poke(Main.sistersAddr + 0x7E8, Main.mariePoint[2]);
+            //Marie's Chair
+            gecko.poke(Main.NPCAddr + 0xAC0, Main.mariechairSize[0]);
+            gecko.poke(Main.NPCAddr + 0xAC8, Main.mariechairSize[2]);
+            gecko.poke(Main.NPCAddr + 0xAD0, Main.mariechairSize[4]);
+            gecko.poke(Main.NPCAddr + 0xAD8, Main.mariechairSize[6]);
+            gecko.poke(Main.NPCAddr + 0xAE0, Main.mariechairSize[8]);
+
+            gecko.poke(Main.NPCAddr + 0xAE4, Main.mariePoint[0]);
+            gecko.poke(Main.NPCAddr + 0xAE8, Main.mariePoint[1]);
+            gecko.poke(Main.NPCAddr + 0xAEC, Main.mariePoint[2]);
+            //Judd
+            gecko.poke(Main.NPCAddr - 0xE44, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0xE34, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0xE24, 0x3F800000);
+
+            gecko.poke(Main.NPCAddr - 0xE20, Main.juddPoint[0]);
+            gecko.poke(Main.NPCAddr - 0xE1C, Main.juddPoint[1]);
+            gecko.poke(Main.NPCAddr - 0xE18, Main.juddPoint[2]);
+            //Spyke
+            gecko.poke(Main.spykeAddr - 0x538, Main.spykeSize[0]);
+            gecko.poke(Main.spykeAddr - 0x530, Main.spykeSize[2]);
+            gecko.poke(Main.spykeAddr - 0x528, Main.spykeSize[4]);
+            gecko.poke(Main.spykeAddr - 0x520, Main.spykeSize[6]);
+            gecko.poke(Main.spykeAddr - 0x518, Main.spykeSize[8]);
+
+            gecko.poke(Main.spykeAddr - 0x514, Main.spykePoint[0]);
+            gecko.poke(Main.spykeAddr - 0x510, Main.spykePoint[1]);
+            gecko.poke(Main.spykeAddr - 0x50C, Main.spykePoint[2]);
+            //Sea Snails
+            gecko.poke(Main.NPCAddr - 0x6798, Main.shellSize[0]);
+            gecko.poke(Main.NPCAddr - 0x6790, Main.shellSize[2]);
+            gecko.poke(Main.NPCAddr - 0x6788, Main.shellSize[4]);
+            gecko.poke(Main.NPCAddr - 0x6780, Main.shellSize[6]);
+            gecko.poke(Main.NPCAddr - 0x6778, Main.shellSize[8]);
+
+            gecko.poke(Main.NPCAddr - 0x6774, Main.shellPoint[0]);
+            gecko.poke(Main.NPCAddr - 0x6770, Main.shellPoint[1]);
+            gecko.poke(Main.NPCAddr - 0x676C, Main.shellPoint[2]);
+            //Train
+            gecko.poke(Main.NPCAddr - 0x9C2C, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x9C1C, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x9C0C, 0x3F800000);
+
+            gecko.poke(Main.NPCAddr - 0x9C08, 0);
+            gecko.poke(Main.NPCAddr - 0x9C04, 0);
+            gecko.poke(Main.NPCAddr - 0x9C00, 0);
+            //Amiibo Box
+            gecko.poke(Main.NPCAddr - 0x608, Main.amiiboSize[0]);
+            gecko.poke(Main.NPCAddr - 0x600, Main.amiiboSize[2]);
+            gecko.poke(Main.NPCAddr - 0x5F8, Main.amiiboSize[4]);
+            gecko.poke(Main.NPCAddr - 0x5F0, Main.amiiboSize[6]);
+            gecko.poke(Main.NPCAddr - 0x5E8, Main.amiiboSize[8]);
+
+            gecko.poke(Main.NPCAddr - 0x5E4, Main.amiiboPoint[0]);
+            gecko.poke(Main.NPCAddr - 0x5E0, Main.amiiboPoint[1]);
+            gecko.poke(Main.NPCAddr - 0x5DC, Main.amiiboPoint[2]);
+            //Balloon
+            gecko.poke(Main.NPCAddr - 0x90D8, Main.balloonSize[0]);
+            gecko.poke(Main.NPCAddr - 0x90D0, Main.balloonSize[2]);
+            gecko.poke(Main.NPCAddr - 0x90C8, Main.balloonSize[4]);
+            gecko.poke(Main.NPCAddr - 0x90C0, Main.balloonSize[6]);
+            gecko.poke(Main.NPCAddr - 0x90B8, Main.balloonSize[8]);
+
+            gecko.poke(Main.NPCAddr - 0x90B4, Main.balloonPoint[0]);
+            gecko.poke(Main.NPCAddr - 0x90B0, Main.balloonPoint[1]);
+            gecko.poke(Main.NPCAddr - 0x90AC, Main.balloonPoint[2]);
+            //Miiverse Post
+            gecko.poke(Main.NPCAddr - 0x1884, Main.postSize[0]);
+            gecko.poke(Main.NPCAddr - 0x187C, Main.postSize[2]);
+            gecko.poke(Main.NPCAddr - 0x1874, Main.postSize[4]);
+            gecko.poke(Main.NPCAddr - 0x186C, Main.postSize[6]);
+            gecko.poke(Main.NPCAddr - 0x1864, Main.postSize[8]);
+
+            gecko.poke(Main.NPCAddr - 0x1860, Main.postPoint[0]);
+            gecko.poke(Main.NPCAddr - 0x185C, Main.postPoint[1]);
+            gecko.poke(Main.NPCAddr - 0x1858, Main.postPoint[2]);
+            //Tree
+            gecko.poke(Main.NPCAddr - 0x8688, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x8678, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x8658, 0x3F800000);
+
+            gecko.poke(Main.NPCAddr - 0x8664, Main.treePoint[0]);
+            gecko.poke(Main.NPCAddr - 0x8660, Main.treePoint[1]);
+            gecko.poke(Main.NPCAddr - 0x865C, Main.treePoint[2]);
+            //Tree 2
+            gecko.poke(Main.NPCAddr - 0x7C38, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x7C28, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x7C18, 0x3F800000);
+
+            gecko.poke(Main.NPCAddr - 0x7C14, Main.tree2Point[0]);
+            gecko.poke(Main.NPCAddr - 0x7C10, Main.tree2Point[1]);
+            gecko.poke(Main.NPCAddr - 0x7C0C, Main.tree2Point[2]);
+            //Tree 3
+            gecko.poke(Main.NPCAddr - 0x5D48, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x5D38, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x5D28, 0x3F800000);
+
+            gecko.poke(Main.NPCAddr - 0x5D24, Main.tree3Point[0]);
+            gecko.poke(Main.NPCAddr - 0x5D20, Main.tree3Point[1]);
+            gecko.poke(Main.NPCAddr - 0x5D1C, Main.tree3Point[2]);
+            //Tree 4
+            gecko.poke(Main.NPCAddr - 0x52F8, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x52E8, 0x3F800000);
+            gecko.poke(Main.NPCAddr - 0x52D8, 0x3F800000);
+
+            gecko.poke(Main.NPCAddr - 0x52D4, Main.tree4Point[0]);
+            gecko.poke(Main.NPCAddr - 0x52D0, Main.tree4Point[1]);
+            gecko.poke(Main.NPCAddr - 0x52CC, Main.tree4Point[2]);
+            //Arcade
+            gecko.poke(Main.NPCAddr + 0x140, Main.arcadeSize[0]);
+            gecko.poke(Main.NPCAddr + 0x148, Main.arcadeSize[2]);
+            gecko.poke(Main.NPCAddr + 0x150, Main.arcadeSize[4]);
+            gecko.poke(Main.NPCAddr + 0x158, Main.arcadeSize[6]);
+            gecko.poke(Main.NPCAddr + 0x160, Main.arcadeSize[8]);
+
+            gecko.poke(Main.NPCAddr + 0x164, Main.arcadePoint[0]);
+            gecko.poke(Main.NPCAddr + 0x168, Main.arcadePoint[1]);
+            gecko.poke(Main.NPCAddr + 0x16C, Main.arcadePoint[2]);
+            //Manhole
+            gecko.poke(Main.manholeAddr - 0x6FC, 0x3F800000);
+            gecko.poke(Main.manholeAddr - 0x6EC, 0x3F800000);
+            gecko.poke(Main.manholeAddr - 0x6DC, 0x3F800000);
+
+            gecko.poke(Main.manholeAddr - 0x6D8, Main.manholePoint[0]);
+            gecko.poke(Main.manholeAddr - 0x6D4, Main.manholePoint[1]);
+            gecko.poke(Main.manholeAddr - 0x6D0, Main.manholePoint[2]);
+            //Weapon sign
+            gecko.poke(Main.NPCAddr - 0x71E8, Main.weaponsignSize[0]);
+            gecko.poke(Main.NPCAddr - 0x71E0, Main.weaponsignSize[2]);
+            gecko.poke(Main.NPCAddr - 0x71D8, Main.weaponsignSize[4]);
+            gecko.poke(Main.NPCAddr - 0x71D0, Main.weaponsignSize[6]);
+            gecko.poke(Main.NPCAddr - 0x71C8, Main.weaponsignSize[8]);
+
+            gecko.poke(Main.NPCAddr - 0x71C4, Main.weaponsignPoint[0]);
+            gecko.poke(Main.NPCAddr - 0x71C0, Main.weaponsignPoint[1]);
+            gecko.poke(Main.NPCAddr - 0x71BC, Main.weaponsignPoint[2]);
         }
 
         //Callie
@@ -90,9 +317,9 @@ namespace PlazaToon
         {
             callieInfoSizeMaster = master;
         }
-        public static decimal callieInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.calliePoint[0]));
-        public static decimal callieInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.calliePoint[1]));
-        public static decimal callieInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.calliePoint[2]));
+        public static decimal callieInfoPoint1 = vert(Main.calliePoint[0]);
+        public static decimal callieInfoPoint2 = vert(Main.calliePoint[1]);
+        public static decimal callieInfoPoint3 = vert(Main.calliePoint[2]);
 
         public static void callieInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -120,9 +347,9 @@ namespace PlazaToon
         {
             callieChairInfoSizeMaster = master;
         }
-        public static decimal callieChairInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.calliePoint[0]));
-        public static decimal callieChairInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.calliePoint[1]));
-        public static decimal callieChairInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.calliePoint[2]));
+        public static decimal callieChairInfoPoint1 = vert(Main.calliePoint[0]);
+        public static decimal callieChairInfoPoint2 = vert(Main.calliePoint[1]);
+        public static decimal callieChairInfoPoint3 = vert(Main.calliePoint[2]);
 
         public static void callieChairInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -150,9 +377,9 @@ namespace PlazaToon
         {
             marieInfoSizeMaster = master;
         }
-        public static decimal marieInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.mariePoint[0]));
-        public static decimal marieInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.mariePoint[1]));
-        public static decimal marieInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.mariePoint[2]));
+        public static decimal marieInfoPoint1 = vert(Main.mariePoint[0]);
+        public static decimal marieInfoPoint2 = vert(Main.mariePoint[1]);
+        public static decimal marieInfoPoint3 = vert(Main.mariePoint[2]);
 
         public static void marieInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -181,9 +408,9 @@ namespace PlazaToon
         {
             marieChairInfoSizeMaster = master;
         }
-        public static decimal marieChairInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.mariePoint[0]));
-        public static decimal marieChairInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.mariePoint[1]));
-        public static decimal marieChairInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.mariePoint[2]));
+        public static decimal marieChairInfoPoint1 = vert(Main.mariePoint[0]);
+        public static decimal marieChairInfoPoint2 = vert(Main.mariePoint[1]);
+        public static decimal marieChairInfoPoint3 = vert(Main.mariePoint[2]);
 
         public static void marieChairInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -207,9 +434,9 @@ namespace PlazaToon
         {
             juddInfoSizeMaster = master;
         }
-        public static decimal juddInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.juddPoint[0]));
-        public static decimal juddInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.juddPoint[1]));
-        public static decimal juddInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.juddPoint[2]));
+        public static decimal juddInfoPoint1 = vert(Main.juddPoint[0]);
+        public static decimal juddInfoPoint2 = vert(Main.juddPoint[1]);
+        public static decimal juddInfoPoint3 = vert(Main.juddPoint[2]);
 
         public static void juddInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -237,9 +464,9 @@ namespace PlazaToon
         {
             spykeInfoSizeMaster = master;
         }
-        public static decimal spykeInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.spykePoint[0]));
-        public static decimal spykeInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.spykePoint[1]));
-        public static decimal spykeInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.spykePoint[2]));
+        public static decimal spykeInfoPoint1 = vert(Main.spykePoint[0]);
+        public static decimal spykeInfoPoint2 = vert(Main.spykePoint[1]);
+        public static decimal spykeInfoPoint3 = vert(Main.spykePoint[2]);
 
         public static void spykeInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -267,15 +494,42 @@ namespace PlazaToon
         {
             shellInfoSizeMaster = master;
         }
-        public static decimal shellInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.shellPoint[0]));
-        public static decimal shellInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.shellPoint[1]));
-        public static decimal shellInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.shellPoint[2]));
+        public static decimal shellInfoPoint1 = vert(Main.shellPoint[0]);
+        public static decimal shellInfoPoint2 = vert(Main.shellPoint[1]);
+        public static decimal shellInfoPoint3 = vert(Main.shellPoint[2]);
 
         public static void shellInfoPoint(decimal x, decimal y, decimal z)
         {
             shellInfoPoint1 = x;
             shellInfoPoint2 = y;
             shellInfoPoint3 = z;
+        }
+        //Train
+        public static decimal trainInfoSize1 = 1;
+        public static decimal trainInfoSize2 = 1;
+        public static decimal trainInfoSize3 = 1;
+        public static decimal trainInfoSizeGlobal = 1;
+        public static decimal trainInfoSizeMaster = 1;
+
+        public static void trainInfoSize(decimal x, decimal y, decimal z)
+        {
+            trainInfoSize1 = x;
+            trainInfoSize2 = y;
+            trainInfoSize3 = z;
+        }
+        public static void trainMasterScale(decimal master)
+        {
+            trainInfoSizeMaster = master;
+        }
+        public static decimal trainInfoPoint1 = 0;
+        public static decimal trainInfoPoint2 = 0;
+        public static decimal trainInfoPoint3 = 0;
+
+        public static void trainInfoPoint(decimal x, decimal y, decimal z)
+        {
+            trainInfoPoint1 = x;
+            trainInfoPoint2 = y;
+            trainInfoPoint3 = z;
         }
         //Amiibo
         public static decimal amiiboInfoSize1 = 1;
@@ -297,9 +551,9 @@ namespace PlazaToon
         {
             amiiboInfoSizeMaster = master;
         }
-        public static decimal amiiboInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.amiiboPoint[0]));
-        public static decimal amiiboInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.amiiboPoint[1]));
-        public static decimal amiiboInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.amiiboPoint[2]));
+        public static decimal amiiboInfoPoint1 = vert(Main.amiiboPoint[0]);
+        public static decimal amiiboInfoPoint2 = vert(Main.amiiboPoint[1]);
+        public static decimal amiiboInfoPoint3 = vert(Main.amiiboPoint[2]);
 
         public static void amiiboInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -327,9 +581,9 @@ namespace PlazaToon
         {
             balloonInfoSizeMaster = master;
         }
-        public static decimal balloonInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.balloonPoint[0]));
-        public static decimal balloonInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.balloonPoint[1]));
-        public static decimal balloonInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.balloonPoint[2]));
+        public static decimal balloonInfoPoint1 = vert(Main.balloonPoint[0]);
+        public static decimal balloonInfoPoint2 = vert(Main.balloonPoint[1]);
+        public static decimal balloonInfoPoint3 = vert(Main.balloonPoint[2]);
 
         public static void balloonInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -357,9 +611,9 @@ namespace PlazaToon
         {
             postInfoSizeMaster = master;
         }
-        public static decimal postInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.postPoint[0]));
-        public static decimal postInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.postPoint[1]));
-        public static decimal postInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.postPoint[2]));
+        public static decimal postInfoPoint1 = vert(Main.postPoint[0]);
+        public static decimal postInfoPoint2 = vert(Main.postPoint[1]);
+        public static decimal postInfoPoint3 = vert(Main.postPoint[2]);
 
         public static void postInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -383,9 +637,9 @@ namespace PlazaToon
         {
             tree1InfoSizeMaster = master;
         }
-        public static decimal tree1InfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.treePoint[0]));
-        public static decimal tree1InfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.treePoint[1]));
-        public static decimal tree1InfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.treePoint[2]));
+        public static decimal tree1InfoPoint1 = vert(Main.treePoint[0]);
+        public static decimal tree1InfoPoint2 = vert(Main.treePoint[1]);
+        public static decimal tree1InfoPoint3 = vert(Main.treePoint[2]);
 
         public static void tree1InfoPoint(decimal x, decimal y, decimal z)
         {
@@ -409,9 +663,9 @@ namespace PlazaToon
         {
             tree2InfoSizeMaster = master;
         }
-        public static decimal tree2InfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.tree2Point[0]));
-        public static decimal tree2InfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.tree2Point[1]));
-        public static decimal tree2InfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.tree2Point[2]));
+        public static decimal tree2InfoPoint1 = vert(Main.tree2Point[0]);
+        public static decimal tree2InfoPoint2 = vert(Main.tree2Point[1]);
+        public static decimal tree2InfoPoint3 = vert(Main.tree2Point[2]);
 
         public static void tree2InfoPoint(decimal x, decimal y, decimal z)
         {
@@ -435,9 +689,9 @@ namespace PlazaToon
         {
             tree3InfoSizeMaster = master;
         }
-        public static decimal tree3InfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.tree3Point[0]));
-        public static decimal tree3InfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.tree3Point[1]));
-        public static decimal tree3InfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.tree3Point[2]));
+        public static decimal tree3InfoPoint1 = vert(Main.tree3Point[0]);
+        public static decimal tree3InfoPoint2 = vert(Main.tree3Point[1]);
+        public static decimal tree3InfoPoint3 = vert(Main.tree3Point[2]);
 
         public static void tree3InfoPoint(decimal x, decimal y, decimal z)
         {
@@ -461,9 +715,9 @@ namespace PlazaToon
         {
             tree4InfoSizeMaster = master;
         }
-        public static decimal tree4InfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.tree4Point[0]));
-        public static decimal tree4InfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.tree4Point[1]));
-        public static decimal tree4InfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.tree4Point[2]));
+        public static decimal tree4InfoPoint1 = vert(Main.tree4Point[0]);
+        public static decimal tree4InfoPoint2 = vert(Main.tree4Point[1]);
+        public static decimal tree4InfoPoint3 = vert(Main.tree4Point[2]);
 
         public static void tree4InfoPoint(decimal x, decimal y, decimal z)
         {
@@ -491,9 +745,9 @@ namespace PlazaToon
         {
             arcadeInfoSizeMaster = master;
         }
-        public static decimal arcadeInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.arcadePoint[0]));
-        public static decimal arcadeInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.arcadePoint[1]));
-        public static decimal arcadeInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.arcadePoint[2]));
+        public static decimal arcadeInfoPoint1 = vert(Main.arcadePoint[0]);
+        public static decimal arcadeInfoPoint2 = vert(Main.arcadePoint[1]);
+        public static decimal arcadeInfoPoint3 = vert(Main.arcadePoint[2]);
 
         public static void arcadeInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -516,9 +770,9 @@ namespace PlazaToon
         {
             manholeInfoSizeMaster = master;
         }
-        public static decimal manholeInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.manholePoint[0]));
-        public static decimal manholeInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.manholePoint[1]));
-        public static decimal manholeInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.manholePoint[2]));
+        public static decimal manholeInfoPoint1 = vert(Main.manholePoint[0]);
+        public static decimal manholeInfoPoint2 = vert(Main.manholePoint[1]);
+        public static decimal manholeInfoPoint3 = vert(Main.manholePoint[2]);
 
         public static void manholeInfoPoint(decimal x, decimal y, decimal z)
         {
@@ -546,9 +800,9 @@ namespace PlazaToon
         {
             weaponsignInfoSizeMaster = master;
         }
-        public static decimal weaponsignInfoPoint1 = Convert.ToDecimal(hex2Float(MainForm.weaponsignPoint[0]));
-        public static decimal weaponsignInfoPoint2 = Convert.ToDecimal(hex2Float(MainForm.weaponsignPoint[1]));
-        public static decimal weaponsignInfoPoint3 = Convert.ToDecimal(hex2Float(MainForm.weaponsignPoint[2]));
+        public static decimal weaponsignInfoPoint1 = vert(Main.weaponsignPoint[0]);
+        public static decimal weaponsignInfoPoint2 = vert(Main.weaponsignPoint[1]);
+        public static decimal weaponsignInfoPoint3 = vert(Main.weaponsignPoint[2]);
 
         public static void weaponsignInfoPoint(decimal x, decimal y, decimal z)
         {
