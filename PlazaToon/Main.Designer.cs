@@ -58,11 +58,12 @@
             this.locnumericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.locnumericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.creatorLabel = new System.Windows.Forms.Label();
-            this.creditLabel = new System.Windows.Forms.Label();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.multiLabel = new System.Windows.Forms.Label();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rattataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comingSoonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,8 +72,7 @@
             this.pokeScaleButton = new System.Windows.Forms.Button();
             this.manualGroupBox = new System.Windows.Forms.GroupBox();
             this.pokeBothButton = new System.Windows.Forms.Button();
-            this.msgLabel = new System.Windows.Forms.Label();
-            this.toolTipquick = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.TCPBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -84,7 +84,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown2)).BeginInit();
-            this.menuStrip1.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.manualGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,7 +139,9 @@
             // 
             // NPCcomboBox
             // 
+            this.NPCcomboBox.DropDownHeight = 304;
             this.NPCcomboBox.FormattingEnabled = true;
+            this.NPCcomboBox.IntegralHeight = false;
             this.NPCcomboBox.Items.AddRange(new object[] {
             "Callie",
             "Callie\'s Chair",
@@ -152,13 +154,27 @@
             "Amiibo Box",
             "Balloon",
             "Miiverse Post",
+            "Arcade",
+            "Manhole",
+            "Weapon Sign",
+            "Awning",
+            "Main TV",
+            "Great Zapfish",
             "Tree 1",
             "Tree 2",
             "Tree 3",
             "Tree 4",
-            "Arcade",
-            "Manhole",
-            "Weapon Sign"});
+            "Bird 1",
+            "Bird 2",
+            "Bird 3",
+            "Bird 4",
+            "Bird 5",
+            "Dooris (Ammo Knights)",
+            "Doory (Cooler Heads)",
+            "Doorothy (Jelly Fresh)",
+            "Doorian (Shrimp Kicks)",
+            "Inkopolis Tower Door",
+            "Battle Dojo Doors"});
             this.NPCcomboBox.Location = new System.Drawing.Point(10, 20);
             this.NPCcomboBox.Name = "NPCcomboBox";
             this.NPCcomboBox.Size = new System.Drawing.Size(141, 21);
@@ -195,6 +211,7 @@
             0,
             0,
             0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             this.numericUpDown1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown1_KeyUp);
             this.numericUpDown1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.numericUpDown1_MouseUp);
             // 
@@ -226,6 +243,7 @@
             0,
             0,
             0});
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
             this.numericUpDown2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown2_KeyUp);
             this.numericUpDown2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.numericUpDown2_MouseUp);
             // 
@@ -257,6 +275,7 @@
             0,
             0,
             0});
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);
             this.numericUpDown3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown3_KeyUp);
             this.numericUpDown3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.numericUpDown3_MouseUp);
             // 
@@ -288,6 +307,7 @@
             0,
             0,
             0});
+            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
             this.numericUpDown5.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown5_KeyUp);
             this.numericUpDown5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.numericUpDown5_MouseUp);
             // 
@@ -319,6 +339,7 @@
             0,
             0,
             0});
+            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
             this.numericUpDown4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown4_KeyUp);
             this.numericUpDown4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.numericUpDown4_MouseUp);
             // 
@@ -396,6 +417,7 @@
             this.zScaleLabel.Size = new System.Drawing.Size(11, 12);
             this.zScaleLabel.TabIndex = 12;
             this.zScaleLabel.Text = "Z";
+            this.zScaleLabel.Click += new System.EventHandler(this.zScaleLabel_Click);
             // 
             // locyLabel
             // 
@@ -421,6 +443,7 @@
             this.z2label.Size = new System.Drawing.Size(18, 12);
             this.z2label.TabIndex = 12;
             this.z2label.Text = "Z 2";
+            this.z2label.Click += new System.EventHandler(this.z2label_Click);
             // 
             // yScaleLabel
             // 
@@ -433,6 +456,7 @@
             this.yScaleLabel.Size = new System.Drawing.Size(10, 12);
             this.yScaleLabel.TabIndex = 12;
             this.yScaleLabel.Text = "Y";
+            this.yScaleLabel.Click += new System.EventHandler(this.yScaleLabel_Click);
             // 
             // locxLabel
             // 
@@ -459,6 +483,7 @@
             this.x2ScaleLabel.TabIndex = 11;
             this.x2ScaleLabel.Text = "X 2";
             this.x2ScaleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.x2ScaleLabel.Click += new System.EventHandler(this.x2ScaleLabel_Click);
             // 
             // xScaleLabel
             // 
@@ -471,6 +496,7 @@
             this.xScaleLabel.Size = new System.Drawing.Size(11, 12);
             this.xScaleLabel.TabIndex = 11;
             this.xScaleLabel.Text = "X";
+            this.xScaleLabel.Click += new System.EventHandler(this.xScaleLabel_Click);
             // 
             // masterLabel
             // 
@@ -483,6 +509,7 @@
             this.masterLabel.Size = new System.Drawing.Size(60, 12);
             this.masterLabel.TabIndex = 11;
             this.masterLabel.Text = "Master Scale";
+            this.masterLabel.Click += new System.EventHandler(this.masterLabel_Click);
             // 
             // coordLabel
             // 
@@ -549,6 +576,7 @@
             0,
             0,
             262144});
+            this.locnumericUpDown1.ValueChanged += new System.EventHandler(this.locnumericUpDown1_ValueChanged);
             this.locnumericUpDown1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.locnumericUpDown1_KeyUp);
             this.locnumericUpDown1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.locnumericUpDown1_MouseUp);
             // 
@@ -575,6 +603,7 @@
             0,
             0,
             -2147221504});
+            this.locnumericUpDown3.ValueChanged += new System.EventHandler(this.locnumericUpDown3_ValueChanged);
             this.locnumericUpDown3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.locnumericUpDown3_KeyUp);
             this.locnumericUpDown3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.locnumericUpDown3_MouseUp);
             // 
@@ -601,101 +630,116 @@
             0,
             0,
             0});
+            this.locnumericUpDown2.ValueChanged += new System.EventHandler(this.locnumericUpDown2_ValueChanged);
             this.locnumericUpDown2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.locnumericUpDown2_KeyUp);
             this.locnumericUpDown2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.locnumericUpDown2_MouseUp);
             // 
             // creatorLabel
             // 
             this.creatorLabel.AutoSize = true;
-            this.creatorLabel.ForeColor = System.Drawing.Color.Gray;
-            this.creatorLabel.Location = new System.Drawing.Point(279, 366);
+            this.creatorLabel.ForeColor = System.Drawing.Color.DimGray;
+            this.creatorLabel.Location = new System.Drawing.Point(279, 365);
             this.creatorLabel.Name = "creatorLabel";
             this.creatorLabel.Size = new System.Drawing.Size(64, 13);
             this.creatorLabel.TabIndex = 13;
             this.creatorLabel.Text = "By Yahya14";
             // 
-            // creditLabel
+            // multiLabel
             // 
-            this.creditLabel.AutoSize = true;
-            this.creditLabel.ForeColor = System.Drawing.Color.Gray;
-            this.creditLabel.Location = new System.Drawing.Point(6, 366);
-            this.creditLabel.Name = "creditLabel";
-            this.creditLabel.Size = new System.Drawing.Size(235, 13);
-            this.creditLabel.TabIndex = 13;
-            this.creditLabel.Text = "Credits to Amibu, Splatonka, CosmoCortney, etc.";
+            this.multiLabel.AutoSize = true;
+            this.multiLabel.ForeColor = System.Drawing.Color.DimGray;
+            this.multiLabel.Location = new System.Drawing.Point(6, 365);
+            this.multiLabel.Name = "multiLabel";
+            this.multiLabel.Size = new System.Drawing.Size(235, 13);
+            this.multiLabel.TabIndex = 13;
+            this.multiLabel.Text = "Credits to Amibu, Splatonka, CosmoCortney, etc.";
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.BackColor = System.Drawing.Color.Transparent;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem,
+            this.autoModeToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(351, 24);
-            this.menuStrip1.TabIndex = 15;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(351, 24);
+            this.menuStrip.TabIndex = 15;
+            this.menuStrip.Text = "menuStrip";
             // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autoModeToolStripMenuItem,
+            this.restoreAllToolStripMenuItem,
             this.resetAllToolStripMenuItem});
-            this.optionsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.optionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.DropDownClosed += new System.EventHandler(this.optionsToolStripMenuItem_DropDownClosed);
+            this.optionsToolStripMenuItem.DropDownOpened += new System.EventHandler(this.optionsToolStripMenuItem_DropDownOpened);
             // 
-            // autoModeToolStripMenuItem
+            // restoreAllToolStripMenuItem
             // 
-            this.autoModeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.autoModeToolStripMenuItem.Name = "autoModeToolStripMenuItem";
-            this.autoModeToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.autoModeToolStripMenuItem.Text = "Automatic Mode";
-            this.autoModeToolStripMenuItem.Click += new System.EventHandler(this.autoModeToolStripMenuItem_Click);
+            this.restoreAllToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.restoreAllToolStripMenuItem.Name = "restoreAllToolStripMenuItem";
+            this.restoreAllToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.restoreAllToolStripMenuItem.Text = "Reload All";
+            this.restoreAllToolStripMenuItem.ToolTipText = "Reloads all NPC\'s scales and locations (use after loading screens)";
+            this.restoreAllToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // resetAllToolStripMenuItem
             // 
             this.resetAllToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
-            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.resetAllToolStripMenuItem.Text = "Reset All";
+            this.resetAllToolStripMenuItem.ToolTipText = "Resets all NPC\'s original scales and locations";
             this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.resetAllToolStripMenuItem_Click);
+            // 
+            // autoModeToolStripMenuItem
+            // 
+            this.autoModeToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
+            this.autoModeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.autoModeToolStripMenuItem.Name = "autoModeToolStripMenuItem";
+            this.autoModeToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.autoModeToolStripMenuItem.Text = "Auto Mode";
+            this.autoModeToolStripMenuItem.Click += new System.EventHandler(this.autoModeToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rattataToolStripMenuItem,
             this.comingSoonToolStripMenuItem});
-            this.helpToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.helpToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            this.helpToolStripMenuItem.DropDownClosed += new System.EventHandler(this.helpToolStripMenuItem_DropDownClosed);
+            this.helpToolStripMenuItem.DropDownOpened += new System.EventHandler(this.helpToolStripMenuItem_DropDownOpened);
             // 
             // rattataToolStripMenuItem
             // 
             this.rattataToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.rattataToolStripMenuItem.Name = "rattataToolStripMenuItem";
-            this.rattataToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.rattataToolStripMenuItem.Text = "rattata";
-            this.rattataToolStripMenuItem.ToolTipText = "Does nothing, rattata.";
-            this.rattataToolStripMenuItem.Visible = false;
+            this.rattataToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rattataToolStripMenuItem.Text = "Visit Github";
             this.rattataToolStripMenuItem.Click += new System.EventHandler(this.rattataToolStripMenuItem_Click);
             // 
             // comingSoonToolStripMenuItem
             // 
             this.comingSoonToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.comingSoonToolStripMenuItem.Name = "comingSoonToolStripMenuItem";
-            this.comingSoonToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.comingSoonToolStripMenuItem.Text = "Coming soon™";
-            this.comingSoonToolStripMenuItem.ToolTipText = "rattata rattata rattata rattata.";
-            this.comingSoonToolStripMenuItem.Visible = false;
+            this.comingSoonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.comingSoonToolStripMenuItem.Text = "Tips and Tricks";
             this.comingSoonToolStripMenuItem.Click += new System.EventHandler(this.comingSoonToolStripMenuItem_Click);
             // 
             // msgTimer
             // 
-            this.msgTimer.Interval = 1000;
+            this.msgTimer.Interval = 1005;
             this.msgTimer.Tick += new System.EventHandler(this.msgTimer_Tick);
             // 
             // pokeLocButton
@@ -740,22 +784,9 @@
             this.pokeBothButton.UseVisualStyleBackColor = true;
             this.pokeBothButton.Click += new System.EventHandler(this.pokeBothButton_Click);
             // 
-            // msgLabel
+            // toolTip
             // 
-            this.msgLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.msgLabel.Location = new System.Drawing.Point(124, 4);
-            this.msgLabel.Name = "msgLabel";
-            this.msgLabel.Size = new System.Drawing.Size(220, 18);
-            this.msgLabel.TabIndex = 16;
-            this.msgLabel.Text = "Enter some successful poke status here.";
-            this.msgLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.msgLabel.Visible = false;
-            // 
-            // toolTipquick
-            // 
-            this.toolTipquick.AutoPopDelay = 100;
-            this.toolTipquick.InitialDelay = 500;
-            this.toolTipquick.ReshowDelay = 100;
+            this.toolTip.AutomaticDelay = 2000;
             // 
             // Main
             // 
@@ -763,18 +794,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(351, 382);
             this.Controls.Add(this.manualGroupBox);
-            this.Controls.Add(this.msgLabel);
-            this.Controls.Add(this.creditLabel);
+            this.Controls.Add(this.multiLabel);
             this.Controls.Add(this.creatorLabel);
             this.Controls.Add(this.ModgroupBox);
             this.Controls.Add(this.TCPBox);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "Main";
-            this.Text = "PlazaToon v0.5";
+            this.Text = "PlazaToon v0.6";
             this.TCPBox.ResumeLayout(false);
             this.TCPBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -788,8 +818,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locnumericUpDown2)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.manualGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -825,22 +855,22 @@
         private System.Windows.Forms.Label locxLabel;
         private System.Windows.Forms.Label coordLabel;
         private System.Windows.Forms.Label creatorLabel;
-        private System.Windows.Forms.Label creditLabel;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
+        private System.Windows.Forms.Label multiLabel;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.Timer msgTimer;
         private System.Windows.Forms.CheckBox oneandtwoCheckBox;
         private System.Windows.Forms.Button pokeLocButton;
         private System.Windows.Forms.Button pokeScaleButton;
         private System.Windows.Forms.GroupBox manualGroupBox;
-        private System.Windows.Forms.ToolStripMenuItem autoModeToolStripMenuItem;
         private System.Windows.Forms.Button pokeBothButton;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.Label msgLabel;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolStripMenuItem autoModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rattataToolStripMenuItem;
-        private System.Windows.Forms.ToolTip toolTipquick;
         private System.Windows.Forms.ToolStripMenuItem comingSoonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restoreAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
     }
 }
 

@@ -294,7 +294,7 @@ namespace PlazaToon
         private const Byte cmd_hook = 0x42;
         private const Byte cmd_hookpause = 0x43;
         private const Byte cmd_step = 0x44;
-        private const Byte cmd_status = 0x50;
+        private const Byte cmd_displayMsg = 0x50;
         private const Byte cmd_cheatexec = 0x60;
         private const Byte cmd_rpc = 0x70;
         private const Byte cmd_nbreakpoint = 0x89;
@@ -1029,14 +1029,14 @@ namespace PlazaToon
         // Tries to repeatedly pause the game until it succeeds
         public void SafePause()
         {
-            bool WasRunning = (status() == WiiStatus.Running);
+            bool WasRunning = (displayMsg() == WiiStatus.Running);
             while (WasRunning)
             {
                 Pause();
                 System.Threading.Thread.Sleep(100);
                 // Sometimes, the game doesn't actually pause...
                 // So loop repeatedly until it does!
-                WasRunning = (status() == WiiStatus.Running);
+                WasRunning = (displayMsg() == WiiStatus.Running);
             }
         }
 
@@ -1052,7 +1052,7 @@ namespace PlazaToon
         // Tries repeatedly to resume the game until it succeeds
         public void SafeResume()
         {
-            bool NotRunning = (status() != WiiStatus.Running);
+            bool NotRunning = (displayMsg() != WiiStatus.Running);
             int failCounter = 0;
             while (NotRunning && failCounter < 10)
             {
@@ -1062,7 +1062,7 @@ namespace PlazaToon
                 // So loop repeatedly until it does!
                 try
                 {
-                    NotRunning = (status() != WiiStatus.Running);
+                    NotRunning = (displayMsg() != WiiStatus.Running);
                 }
                 catch (TCPTCPGecko.ETCPGeckoException ex)
                 {
@@ -1186,21 +1186,21 @@ namespace PlazaToon
         }
         #endregion
 
-        //Returns the console status
-        public WiiStatus status()
+        //Returns the console displayMsg
+        public WiiStatus displayMsg()
         {
             System.Threading.Thread.Sleep(100);
             //Initialise Gecko
             if (!InitGecko())
                 throw new ETCPGeckoException(ETCPErrorCode.FTDIResetError);
 
-            //Send status command
-            if (RawCommand(cmd_status) != FTDICommand.CMD_OK)
+            //Send displayMsg command
+            if (RawCommand(cmd_displayMsg) != FTDICommand.CMD_OK)
                 throw new ETCPGeckoException(ETCPErrorCode.FTDICommandSendError);
 
             //			System.Threading.Thread.Sleep(10);
 
-            //Read status
+            //Read displayMsg
             Byte[] buffer = new Byte[1];
             if (GeckoRead(buffer, 1) != FTDICommand.CMD_OK)
                 throw new ETCPGeckoException(ETCPErrorCode.FTDIReadDataError);
@@ -1318,7 +1318,7 @@ namespace PlazaToon
         }
 
         //Returns true once a Breakpoint has hit
-        //Function is depricated use status function instead - only for backwards compatibility with Delphi ports!
+        //Function is depricated use displayMsg function instead - only for backwards compatibility with Delphi ports!
         public bool BreakpointHit()
         {
             Byte[] buffer = new Byte[1];
