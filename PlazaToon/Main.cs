@@ -368,15 +368,15 @@ namespace PlazaToon
         //several location numeric boxes
         private void locnumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            locUpdate1();
+            if (!NPCcomboBox.ContainsFocus && autoModeToolStripMenuItem.Checked == true) { locUpdate1(); }
         }
         private void locnumericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            locUpdate2();
+            if (!NPCcomboBox.ContainsFocus && autoModeToolStripMenuItem.Checked == true) { locUpdate2(); }
         }
         private void locnumericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            locUpdate3();
+            if (!NPCcomboBox.ContainsFocus && autoModeToolStripMenuItem.Checked == true) { locUpdate3(); }
         }
 
         //master numeric box
