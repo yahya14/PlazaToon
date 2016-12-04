@@ -22,7 +22,7 @@ namespace PlazaToon
         public static uint NPCAddr;
         public static uint spykeAddr;
         public static uint manHoleAddr;
-        public static string NPCText;
+        public static int Sign;
         public static uint triparamSizeDefault = 0x3F800000;
 
         //arrays
@@ -55,7 +55,7 @@ namespace PlazaToon
         public static uint[] amiiboPoint = new uint[3] { 0x4374D200, 0x00000000, 0x437E9400 };
         public static uint[] balloonPoint = new uint[3] { 0xC328370C, 0x41300000, 0xC2612360 };
         public static uint[] postPoint = new uint[3] { 0xC24688B9, 0x00000000, 0xC379BC00 };
-        public static uint[] treePoint = new uint[3] { 0xC31F9663, 0x00000000, 0x42E39610 };
+        public static uint[] tree1Point = new uint[3] { 0xC31F9663, 0x00000000, 0x42E39610 };
         public static uint[] tree2Point = new uint[3] { 0x4389D236, 0x3FB80000, 0x43B6BB6E };
         public static uint[] tree3Point = new uint[3] { 0x43AE55BC, 0x3FC82E70, 0x43AEB932 };
         public static uint[] tree4Point = new uint[3] { 0x43D8DA7B, 0x40AA7A2F, 0x438A87D9 };
@@ -65,7 +65,7 @@ namespace PlazaToon
         public static uint[] weaponSignPoint = new uint[3] { 0xC2E61AF8, 0x00000000, 0xC33DCB02 };
         public static uint[] fishPoint = new uint[3] { 0xB5FC0000, 0x4320D7C4, 0xC3FF86B2 };
         public static uint[] clothPoint = new uint[3] { 0xC34A999A, 0x42300000, 0x432C0000 };
-        public static uint[] birdPoint = new uint[3] { 0x4291315F, 0x41E17CCD, 0x438D1305 };
+        public static uint[] bird1Point = new uint[3] { 0x4291315F, 0x41E17CCD, 0x438D1305 };
         public static uint[] bird2Point = new uint[3] { 0xC26A1B0B, 0x416C74D2, 0x4335BE91 };
         public static uint[] bird3Point = new uint[3] { 0x42489CB5, 0x3E4CCCAA, 0xC3192269 };
         public static uint[] bird4Point = new uint[3] { 0x43B15256, 0x3DCCB79A, 0xC2BBC150 };
@@ -111,22 +111,25 @@ namespace PlazaToon
         private void helpToolStripMenuItem_DropDownClosed(object sender, EventArgs e) { helpToolStripMenuItem.BackColor = Color.Transparent; }
 
         //Converters
-        private uint pointer(uint addr, string sign, uint offset)
+        private uint offsetPeek(uint addr, int sign, uint offset)
         {
-            uint a;
-            uint b;
-            if (sign == "minus")
+            uint a = 0;
+            switch (sign)
             {
-                a = gecko.peek(addr) - offset;
-                b = gecko.peek(a);
+                case 0:
+                    {
+                        a = gecko.peek(addr + offset);
+                        break;
+                    }
+                case 1:
+                    {
+                        a = gecko.peek(addr - offset);
+                        break;
+                    }
             }
-            else
-            {
-                a = gecko.peek(addr) + offset;
-                b = gecko.peek(a);
-            }
-            return b;
+            return a;
         }
+
         public static uint float2Hex(float fNum) //float to uint converter made by lean because he's bae
         {
             byte[] buffer = BitConverter.GetBytes(fNum);
@@ -166,29 +169,41 @@ namespace PlazaToon
                 if (check == 0) //Geckiine
                 {
                     diff = 0x4C0;
+                    Sign = 1;
                     ConnectButton.BackColor = Color.FromArgb(60, 120, 210); //dark blue change indicating geckiine
                 }
-                else if (check == 0xFFFFFFFF && gecko.peek(0x12CE3DA0) != 0x000003F2) //Loadiine
+                else if (check == 0xFFFFFFFF) //Loadiine
                 {
                     diff = 0;
+                    Sign = 0;
                     ConnectButton.BackColor = Color.FromArgb(50, 145, 245); //light blue change indicating Loadiine
                     //Console.WriteLine("pointer's are for Loadiine");
                 }
-                else //Codehandler
+                else if (gecko.peek(0x12CE3DA0) == 0x000003F2 || gecko.peek(0x12CDCDA0) == 0x000003F2) //Codehandler
                 {
-                    //diff = placeholder;
+                    diff = 0x1A00;
+                    Sign = 0;
+                    ConnectButton.BackColor = Color.FromArgb(245, 160, 80); //light blue change indicating Loadiine
                     //Console.WriteLine("pointer's are for the Codehandler...or none of the above");
+                }
+                else
+                {
+                    DisconnButton_Click(sender, e);
+                    MessageBox.Show("No valid offsets were found", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
                 if (autoModeToolStripMenuItem.Checked == true)
                 {
                     ConnectButton.Text = "Recalculate";
                 }
-                DisconnButton.BackColor = Color.FromArgb(225, 39, 39);
 
-                recalculateAddr();
-                NPCInfoSize();
-                numericBoxLoad();
-                NPCcomboBox.Focus();
+                if (gecko != null)
+                {
+                    DisconnButton.BackColor = Color.FromArgb(225, 39, 39);
+                    recalculateAddr();
+                    NPCInfoSizeSav();
+                    numericBoxLoad();
+                    NPCcomboBox.Focus();
+                }
             }
             else
             {
@@ -197,15 +212,16 @@ namespace PlazaToon
                     displayMsg("Addresses have been recalculated.");
                 }
                 recalculateAddr();
-                NPCInfoSize();
+                NPCInfoSizeSav();
             }
         }
         private void recalculateAddr()
-        {
-            sistersAddr = gecko.peek(0x1CAAAC50 - diff);
-            manHoleAddr = gecko.peek(0x1CAAAE68 - diff);
-            NPCAddr = gecko.peek(0x1CAAAE70 - diff);
-            spykeAddr = gecko.peek(0x1CAAAE78 - diff);
+        {  
+            sistersAddr = offsetPeek(0x1CAAAC50, Sign, diff);
+            manHoleAddr = offsetPeek(0x1CAAAE68, Sign, diff);
+            NPCAddr = offsetPeek(0x1CAAAE70, Sign, diff);
+            spykeAddr = offsetPeek(0x1CAAAE78, Sign, diff);
+            
         }
         private void IPBox_KeyDown(object sender, KeyEventArgs e) //User can press Enter to connect
         {
@@ -222,7 +238,7 @@ namespace PlazaToon
                 gecko = null;
                 ConnectButton.Text = "Connect";
                 ConnectButton.BackColor = Color.FromArgb(90, 200, 92);
-                DisconnButton.BackColor = Color.FromArgb(190, 35, 50);
+                DisconnButton.BackColor = Color.FromArgb(200, 40, 50);
             }
         }
 
@@ -233,7 +249,7 @@ namespace PlazaToon
             {
                 recalculateAddr();
                 Info.resetti();
-                NPCInfoSize();
+                NPCInfoSizeSav();
                 numericBoxLoad();
                 displayMsg("All settings has been resetted.");
             }
@@ -251,7 +267,7 @@ namespace PlazaToon
             {
                 recalculateAddr();
                 Info.loadi();
-                NPCInfoSize();
+                NPCInfoSizeSav();
                 numericBoxLoad();
                 displayMsg("All settings has been reloaded.");
             }
@@ -305,11 +321,11 @@ namespace PlazaToon
                 numericUpDown4.Increment = (decimal)0.25;
                 masternumericUpDown.Increment = (decimal)0.25;
             }
-            NPCInfoSize();
+            NPCInfoSizeSav();
             numericBoxLoad();
         }
 
-        private void NPCcomboBox_MouseUp(object sender, MouseEventArgs e) { rattata = (Control)sender; }
+        private void NPCcomboBox_MouseUp(object sender, MouseEventArgs e) { NPCsav(); rattata = (Control)sender; }
 
         //several size numeric boxes
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -423,18 +439,18 @@ namespace PlazaToon
         private void locnumericUpDown1_MouseUp(object sender, MouseEventArgs e) { NPCsav(); rattata = (Control)sender; }
         private void locnumericUpDown2_MouseUp(object sender, MouseEventArgs e) { NPCsav(); rattata = (Control)sender; }
         private void locnumericUpDown3_MouseUp(object sender, MouseEventArgs e) { NPCsav(); rattata = (Control)sender; }
-        //you know what they say, always play it safe (with keydowns)
-        private void numericUpDown1_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void numericUpDown2_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void numericUpDown3_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void numericUpDown4_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void numericUpDown5_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void locnumericUpDown1_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void locnumericUpDown2_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
-        private void locnumericUpDown3_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { NPCsav(); } }
+        //saves with keydowns
+        private void numericUpDown1_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void numericUpDown2_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void numericUpDown3_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void numericUpDown4_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void numericUpDown5_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void locnumericUpDown1_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void locnumericUpDown2_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
+        private void locnumericUpDown3_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
         //Master scale seperate save
-        private void masternumericUpDown_MouseUp(object sender, MouseEventArgs e) { rattata = (Control)sender; masterScaleSav(); NPCsav(); }
-        private void masternumericUpDown_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) { masterScaleSav(); NPCsav(); } }
+        private void masternumericUpDown_MouseUp(object sender, MouseEventArgs e) { rattata = (Control)sender; NPCsav(); }
+        private void masternumericUpDown_KeyUp(object sender, KeyEventArgs e) { rattata = (Control)sender; if (e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Back) { NPCsav(); } }
 
         //click the labels to set the values to 1 and 0
         private void xScaleLabel_Click(object sender, EventArgs e) { numericUpDown1.Value = 1; NPCsav(); }
@@ -442,7 +458,7 @@ namespace PlazaToon
         private void zScaleLabel_Click(object sender, EventArgs e) { numericUpDown4.Value = 1; NPCsav(); }
         private void x2ScaleLabel_Click(object sender, EventArgs e) { numericUpDown2.Value = 1; NPCsav(); }
         private void z2label_Click(object sender, EventArgs e) { numericUpDown5.Value = 1; NPCsav(); }
-        private void masterLabel_Click(object sender, EventArgs e) { masternumericUpDown.Value = 1; NPCsav();  masterScaleSav(); }
+        private void masterLabel_Click(object sender, EventArgs e) { masternumericUpDown.Value = 1; NPCsav(); }
 
         private void locxlabel_Click(object sender, EventArgs e) { locnumericUpDown1.Value = 0; NPCsav(); }
         private void locyLabel_Click(object sender, EventArgs e) { locnumericUpDown2.Value = 0; NPCsav(); }
@@ -461,6 +477,7 @@ namespace PlazaToon
                 multiLabel.Location = new Point(6, 315);
                 creatorLabel.Location = new Point(279, 315);
                 Size = new Size(367, 371);
+                if (rattata != null) { rattata.Focus(); }
             }
             else if (autoModeToolStripMenuItem.Checked == true)
             {
@@ -472,6 +489,7 @@ namespace PlazaToon
                 multiLabel.Location = new Point(6, 365);
                 creatorLabel.Location = new Point(279, 365);
                 Size = new Size(367, 421);
+                if (rattata != null) { rattata.Focus(); }
             }
         }
         //help buttons PLACEHOLDER FOR NOW
@@ -488,7 +506,7 @@ namespace PlazaToon
         private void scaleUpdate1()
         {
             var x1 = hex2Float(NPCSizeData[0]) * Convert.ToSingle(numericUpDown1.Value);
-            if (gecko != null)
+            if (gecko != null && ValidMemory.validAddress(NPCSizeAddr[0]))
             {
                 gecko.poke(NPCSizeAddr[0], float2Hex(x1));
             }
@@ -547,7 +565,7 @@ namespace PlazaToon
             }
         }
 
-        private void NPCInfoSize() //Where NPC Data is handled
+        private void NPCInfoSizeSav() //Where NPC Data is handled
         {
             switch (NPCcomboBox.Text)
             {
@@ -1039,391 +1057,386 @@ namespace PlazaToon
             {
                 case "Callie":
                     {
-                        masternumericUpDown.Value = Info.callieInfoSizeMaster;
-                        numericUpDown1.Value = Info.callieInfoSize1;
-                        numericUpDown2.Value = Info.callieInfoSize2;
-                        numericUpDown3.Value = Info.callieInfoSize3;
-                        numericUpDown4.Value = Info.callieInfoSize4;
-                        numericUpDown5.Value = Info.callieInfoSize5;
-                        locnumericUpDown1.Value = Info.callieInfoPoint1;
-                        locnumericUpDown2.Value = Info.callieInfoPoint2;
-                        locnumericUpDown3.Value = Info.callieInfoPoint3;
+                        numericUpDown1.Value = Info.callieInfo[0];
+                        numericUpDown2.Value = Info.callieInfo[1];
+                        numericUpDown3.Value = Info.callieInfo[2];
+                        numericUpDown4.Value = Info.callieInfo[3];
+                        numericUpDown5.Value = Info.callieInfo[4];
+                        masternumericUpDown.Value = Info.callieInfo[5];
+                        locnumericUpDown1.Value = Info.callieInfo[6];
+                        locnumericUpDown2.Value = Info.callieInfo[7];
+                        locnumericUpDown3.Value = Info.callieInfo[8];
                         break;
                     }
                 case "Callie's Chair":
                     {
-                        masternumericUpDown.Value = Info.callieChairInfoSizeMaster;
-                        numericUpDown1.Value = Info.callieChairInfoSize1;
-                        numericUpDown2.Value = Info.callieChairInfoSize2;
-                        numericUpDown3.Value = Info.callieChairInfoSize3;
-                        numericUpDown4.Value = Info.callieChairInfoSize4;
-                        numericUpDown5.Value = Info.callieChairInfoSize5;
-                        locnumericUpDown1.Value = Info.callieChairInfoPoint1;
-                        locnumericUpDown2.Value = Info.callieChairInfoPoint2;
-                        locnumericUpDown3.Value = Info.callieChairInfoPoint3;
+                        numericUpDown1.Value = Info.callieChairInfo[0];
+                        numericUpDown2.Value = Info.callieChairInfo[1];
+                        numericUpDown3.Value = Info.callieChairInfo[2];
+                        numericUpDown4.Value = Info.callieChairInfo[3];
+                        numericUpDown5.Value = Info.callieChairInfo[4];
+                        masternumericUpDown.Value = Info.callieChairInfo[5];
+                        locnumericUpDown1.Value = Info.callieChairInfo[6];
+                        locnumericUpDown2.Value = Info.callieChairInfo[7];
+                        locnumericUpDown3.Value = Info.callieChairInfo[8];
                         break;
                     }
                 case "Marie":
                     {
-                        masternumericUpDown.Value = Info.marieInfoSizeMaster;
-                        numericUpDown1.Value = Info.marieInfoSize1;
-                        numericUpDown2.Value = Info.marieInfoSize2;
-                        numericUpDown3.Value = Info.marieInfoSize3;
-                        numericUpDown4.Value = Info.marieInfoSize4;
-                        numericUpDown5.Value = Info.marieInfoSize5;
-                        locnumericUpDown1.Value = Info.marieInfoPoint1;
-                        locnumericUpDown2.Value = Info.marieInfoPoint2;
-                        locnumericUpDown3.Value = Info.marieInfoPoint3;
+                        numericUpDown1.Value = Info.marieInfo[0];
+                        numericUpDown2.Value = Info.marieInfo[1];
+                        numericUpDown3.Value = Info.marieInfo[2];
+                        numericUpDown4.Value = Info.marieInfo[3];
+                        numericUpDown5.Value = Info.marieInfo[4];
+                        masternumericUpDown.Value = Info.marieInfo[5];
+                        locnumericUpDown1.Value = Info.marieInfo[6];
+                        locnumericUpDown2.Value = Info.marieInfo[7];
+                        locnumericUpDown3.Value = Info.marieInfo[8];
                         break;
                     }
                 case "Marie's Chair":
                     {
-                        masternumericUpDown.Value = Info.marieChairInfoSizeMaster;
-                        numericUpDown1.Value = Info.marieChairInfoSize1;
-                        numericUpDown2.Value = Info.marieChairInfoSize2;
-                        numericUpDown3.Value = Info.marieChairInfoSize3;
-                        numericUpDown4.Value = Info.marieChairInfoSize4;
-                        numericUpDown5.Value = Info.marieChairInfoSize5;
-                        locnumericUpDown1.Value = Info.marieChairInfoPoint1;
-                        locnumericUpDown2.Value = Info.marieChairInfoPoint2;
-                        locnumericUpDown3.Value = Info.marieChairInfoPoint3;
+                        numericUpDown1.Value = Info.marieChairInfo[0];
+                        numericUpDown2.Value = Info.marieChairInfo[1];
+                        numericUpDown3.Value = Info.marieChairInfo[2];
+                        numericUpDown4.Value = Info.marieChairInfo[3];
+                        numericUpDown5.Value = Info.marieChairInfo[4];
+                        masternumericUpDown.Value = Info.marieChairInfo[5];
+                        locnumericUpDown1.Value = Info.marieChairInfo[6];
+                        locnumericUpDown2.Value = Info.marieChairInfo[7];
+                        locnumericUpDown3.Value = Info.marieChairInfo[8];
                         break;
                     }
                 case "Judd":
                     {
-                        masternumericUpDown.Value = Info.juddInfoSizeMaster;
-                        numericUpDown1.Value = Info.juddInfoSize1;
-                        numericUpDown3.Value = Info.juddInfoSize2;
-                        numericUpDown4.Value = Info.juddInfoSize3;
-                        locnumericUpDown1.Value = Info.juddInfoPoint1;
-                        locnumericUpDown2.Value = Info.juddInfoPoint2;
-                        locnumericUpDown3.Value = Info.juddInfoPoint3;
+                        numericUpDown1.Value = Info.juddInfo[0];
+                        numericUpDown3.Value = Info.juddInfo[1];
+                        numericUpDown4.Value = Info.juddInfo[2];
+                        masternumericUpDown.Value = Info.juddInfo[5];
+                        locnumericUpDown1.Value = Info.juddInfo[6];
+                        locnumericUpDown2.Value = Info.juddInfo[7];
+                        locnumericUpDown3.Value = Info.juddInfo[8];
                         break;
                     }
                 case "Spyke":
                     {
-                        masternumericUpDown.Value = Info.spykeInfoSizeMaster;
-                        numericUpDown1.Value = Info.spykeInfoSize1;
-                        numericUpDown2.Value = Info.spykeInfoSize2;
-                        numericUpDown3.Value = Info.spykeInfoSize3;
-                        numericUpDown4.Value = Info.spykeInfoSize4;
-                        numericUpDown5.Value = Info.spykeInfoSize5;
-                        locnumericUpDown1.Value = Info.spykeInfoPoint1;
-                        locnumericUpDown2.Value = Info.spykeInfoPoint2;
-                        locnumericUpDown3.Value = Info.spykeInfoPoint3;
+                        numericUpDown1.Value = Info.spykeInfo[0];
+                        numericUpDown2.Value = Info.spykeInfo[1];
+                        numericUpDown3.Value = Info.spykeInfo[2];
+                        numericUpDown4.Value = Info.spykeInfo[3];
+                        numericUpDown5.Value = Info.spykeInfo[4];
+                        masternumericUpDown.Value = Info.spykeInfo[5];
+                        locnumericUpDown1.Value = Info.spykeInfo[6];
+                        locnumericUpDown2.Value = Info.spykeInfo[7];
+                        locnumericUpDown3.Value = Info.spykeInfo[8];
                         break;
                     }
                 case "Sea Snails":
                     {
-                        masternumericUpDown.Value = Info.shellInfoSizeMaster;
-                        numericUpDown1.Value = Info.shellInfoSize1;
-                        numericUpDown2.Value = Info.shellInfoSize2;
-                        numericUpDown3.Value = Info.shellInfoSize3;
-                        numericUpDown4.Value = Info.shellInfoSize4;
-                        numericUpDown5.Value = Info.shellInfoSize5;
-
-                        locnumericUpDown1.Value = Info.shellInfoPoint1;
-                        locnumericUpDown2.Value = Info.shellInfoPoint2;
-                        locnumericUpDown3.Value = Info.shellInfoPoint3;
+                        numericUpDown1.Value = Info.shellInfo[0];
+                        numericUpDown2.Value = Info.shellInfo[1];
+                        numericUpDown3.Value = Info.shellInfo[2];
+                        numericUpDown4.Value = Info.shellInfo[3];
+                        numericUpDown5.Value = Info.shellInfo[4];
+                        masternumericUpDown.Value = Info.shellInfo[5];
+                        locnumericUpDown1.Value = Info.shellInfo[6];
+                        locnumericUpDown2.Value = Info.shellInfo[7];
+                        locnumericUpDown3.Value = Info.shellInfo[8];
                         break;
                     }
                 case "Train":
                     {
-                        masternumericUpDown.Value = Info.trainInfoSizeMaster;
-                        numericUpDown1.Value = Info.trainInfoSize1;
-                        numericUpDown3.Value = Info.trainInfoSize2;
-                        numericUpDown4.Value = Info.trainInfoSize3;
-                        locnumericUpDown1.Value = Info.trainInfoPoint1;
-                        locnumericUpDown2.Value = Info.trainInfoPoint2;
-                        locnumericUpDown3.Value = Info.trainInfoPoint3;
+                        numericUpDown1.Value = Info.trainInfo[0];
+                        numericUpDown3.Value = Info.trainInfo[1];
+                        numericUpDown4.Value = Info.trainInfo[2];
+                        masternumericUpDown.Value = Info.trainInfo[5];
+                        locnumericUpDown1.Value = Info.trainInfo[6];
+                        locnumericUpDown2.Value = Info.trainInfo[7];
+                        locnumericUpDown3.Value = Info.trainInfo[8];
                         break;
                     }
                 case "Amiibo Box":
                     {
-                        masternumericUpDown.Value = Info.amiiboInfoSizeMaster;
-                        numericUpDown1.Value = Info.amiiboInfoSize1;
-                        numericUpDown2.Value = Info.amiiboInfoSize2;
-                        numericUpDown3.Value = Info.amiiboInfoSize3;
-                        numericUpDown4.Value = Info.amiiboInfoSize4;
-                        numericUpDown5.Value = Info.amiiboInfoSize5;
-
-                        locnumericUpDown1.Value = Info.amiiboInfoPoint1;
-                        locnumericUpDown2.Value = Info.amiiboInfoPoint2;
-                        locnumericUpDown3.Value = Info.amiiboInfoPoint3;
+                        numericUpDown1.Value = Info.amiiboInfo[0];
+                        numericUpDown2.Value = Info.amiiboInfo[1];
+                        numericUpDown3.Value = Info.amiiboInfo[2];
+                        numericUpDown4.Value = Info.amiiboInfo[3];
+                        numericUpDown5.Value = Info.amiiboInfo[4];
+                        masternumericUpDown.Value = Info.amiiboInfo[5];
+                        locnumericUpDown1.Value = Info.amiiboInfo[6];
+                        locnumericUpDown2.Value = Info.amiiboInfo[7];
+                        locnumericUpDown3.Value = Info.amiiboInfo[8];
                         break;
                     }
                 case "Balloon":
                     {
-                        masternumericUpDown.Value = Info.balloonInfoSizeMaster;
-                        numericUpDown1.Value = Info.balloonInfoSize1;
-                        numericUpDown2.Value = Info.balloonInfoSize2;
-                        numericUpDown3.Value = Info.balloonInfoSize3;
-                        numericUpDown4.Value = Info.balloonInfoSize4;
-                        numericUpDown5.Value = Info.balloonInfoSize5;
-
-                        locnumericUpDown1.Value = Info.balloonInfoPoint1;
-                        locnumericUpDown2.Value = Info.balloonInfoPoint2;
-                        locnumericUpDown3.Value = Info.balloonInfoPoint3;
+                        numericUpDown1.Value = Info.balloonInfo[0];
+                        numericUpDown2.Value = Info.balloonInfo[1];
+                        numericUpDown3.Value = Info.balloonInfo[2];
+                        numericUpDown4.Value = Info.balloonInfo[3];
+                        numericUpDown5.Value = Info.balloonInfo[4];
+                        masternumericUpDown.Value = Info.balloonInfo[5];
+                        locnumericUpDown1.Value = Info.balloonInfo[6];
+                        locnumericUpDown2.Value = Info.balloonInfo[7];
+                        locnumericUpDown3.Value = Info.balloonInfo[8];
                         break;
                     }
                 case "Miiverse Post":
                     {
-                        masternumericUpDown.Value = Info.postInfoSizeMaster;
-                        numericUpDown1.Value = Info.postInfoSize1;
-                        numericUpDown2.Value = Info.postInfoSize2;
-                        numericUpDown3.Value = Info.postInfoSize3;
-                        numericUpDown4.Value = Info.postInfoSize4;
-                        numericUpDown5.Value = Info.postInfoSize5;
-
-                        locnumericUpDown1.Value = Info.postInfoPoint1;
-                        locnumericUpDown2.Value = Info.postInfoPoint2;
-                        locnumericUpDown3.Value = Info.postInfoPoint3;
+                        numericUpDown1.Value = Info.postInfo[0];
+                        numericUpDown2.Value = Info.postInfo[1];
+                        numericUpDown3.Value = Info.postInfo[2];
+                        numericUpDown4.Value = Info.postInfo[3];
+                        numericUpDown5.Value = Info.postInfo[4];
+                        masternumericUpDown.Value = Info.postInfo[5];
+                        locnumericUpDown1.Value = Info.postInfo[6];
+                        locnumericUpDown2.Value = Info.postInfo[7];
+                        locnumericUpDown3.Value = Info.postInfo[8];
                         break;
                     }
                 case "Arcade":
                     {
-                        masternumericUpDown.Value = Info.arcadeInfoSizeMaster;
-                        numericUpDown1.Value = Info.arcadeInfoSize1;
-                        numericUpDown2.Value = Info.arcadeInfoSize2;
-                        numericUpDown3.Value = Info.arcadeInfoSize3;
-                        numericUpDown4.Value = Info.arcadeInfoSize4;
-                        numericUpDown5.Value = Info.arcadeInfoSize5;
-                        locnumericUpDown1.Value = Info.arcadeInfoPoint1;
-                        locnumericUpDown2.Value = Info.arcadeInfoPoint2;
-                        locnumericUpDown3.Value = Info.arcadeInfoPoint3;
+                        numericUpDown1.Value = Info.arcadeInfo[0];
+                        numericUpDown2.Value = Info.arcadeInfo[1];
+                        numericUpDown3.Value = Info.arcadeInfo[2];
+                        numericUpDown4.Value = Info.arcadeInfo[3];
+                        numericUpDown5.Value = Info.arcadeInfo[4];
+                        masternumericUpDown.Value = Info.arcadeInfo[5];
+                        locnumericUpDown1.Value = Info.arcadeInfo[6];
+                        locnumericUpDown2.Value = Info.arcadeInfo[7];
+                        locnumericUpDown3.Value = Info.arcadeInfo[8];
                         break;
                     }
                 case "Manhole":
                     {
-                        masternumericUpDown.Value = Info.manHoleInfoSizeMaster;
-                        numericUpDown1.Value = Info.manHoleInfoSize1;
-                        numericUpDown3.Value = Info.manHoleInfoSize2;
-                        numericUpDown4.Value = Info.manHoleInfoSize3;
-                        locnumericUpDown1.Value = Info.manHoleInfoPoint1;
-                        locnumericUpDown2.Value = Info.manHoleInfoPoint2;
-                        locnumericUpDown3.Value = Info.manHoleInfoPoint3;
+                        numericUpDown1.Value = Info.manHoleInfo[0];
+                        numericUpDown3.Value = Info.manHoleInfo[1];
+                        numericUpDown4.Value = Info.manHoleInfo[2];
+                        masternumericUpDown.Value = Info.manHoleInfo[5];
+                        locnumericUpDown1.Value = Info.manHoleInfo[6];
+                        locnumericUpDown2.Value = Info.manHoleInfo[7];
+                        locnumericUpDown3.Value = Info.manHoleInfo[8];
                         break;
                     }
                 case "Weapon Sign":
                     {
-                        masternumericUpDown.Value = Info.weaponSignInfoSizeMaster;
-                        numericUpDown1.Value = Info.weaponSignInfoSize1;
-                        numericUpDown2.Value = Info.weaponSignInfoSize2;
-                        numericUpDown3.Value = Info.weaponSignInfoSize3;
-                        numericUpDown4.Value = Info.weaponSignInfoSize4;
-                        numericUpDown5.Value = Info.weaponSignInfoSize5;
-
-                        locnumericUpDown1.Value = Info.weaponSignInfoPoint1;
-                        locnumericUpDown2.Value = Info.weaponSignInfoPoint2;
-                        locnumericUpDown3.Value = Info.weaponSignInfoPoint3;
+                        numericUpDown1.Value = Info.weaponSignInfo[0];
+                        numericUpDown2.Value = Info.weaponSignInfo[1];
+                        numericUpDown3.Value = Info.weaponSignInfo[2];
+                        numericUpDown4.Value = Info.weaponSignInfo[3];
+                        numericUpDown5.Value = Info.weaponSignInfo[4];
+                        masternumericUpDown.Value = Info.weaponSignInfo[5];
+                        locnumericUpDown1.Value = Info.weaponSignInfo[6];
+                        locnumericUpDown2.Value = Info.weaponSignInfo[7];
+                        locnumericUpDown3.Value = Info.weaponSignInfo[8];
                         break;
                     }
                 case "Awning":
                     {
-                        masternumericUpDown.Value = Info.clothInfoSizeMaster;
-                        numericUpDown1.Value = Info.clothInfoSize1;
-                        numericUpDown3.Value = Info.clothInfoSize2;
-                        numericUpDown4.Value = Info.clothInfoSize3;
-                        locnumericUpDown1.Value = Info.clothInfoPoint1;
-                        locnumericUpDown2.Value = Info.clothInfoPoint2;
-                        locnumericUpDown3.Value = Info.clothInfoPoint3;
+                        numericUpDown1.Value = Info.clothInfo[0];
+                        numericUpDown3.Value = Info.clothInfo[1];
+                        numericUpDown4.Value = Info.clothInfo[2];
+                        masternumericUpDown.Value = Info.clothInfo[5];
+                        locnumericUpDown1.Value = Info.clothInfo[6];
+                        locnumericUpDown2.Value = Info.clothInfo[7];
+                        locnumericUpDown3.Value = Info.clothInfo[8];
                         break;
                     }
                 case "Main TV":
                     {
-                        masternumericUpDown.Value = Info.tvInfoSizeMaster;
-                        numericUpDown1.Value = Info.tvInfoSize1;
-                        numericUpDown3.Value = Info.tvInfoSize2;
-                        numericUpDown4.Value = Info.tvInfoSize3;
-                        locnumericUpDown1.Value = Info.tvInfoPoint1;
-                        locnumericUpDown2.Value = Info.tvInfoPoint2;
-                        locnumericUpDown3.Value = Info.tvInfoPoint3;
+                        numericUpDown1.Value = Info.tvInfo[0];
+                        numericUpDown3.Value = Info.tvInfo[1];
+                        numericUpDown4.Value = Info.tvInfo[2];
+                        masternumericUpDown.Value = Info.tvInfo[5];
+                        locnumericUpDown1.Value = Info.tvInfo[6];
+                        locnumericUpDown2.Value = Info.tvInfo[7];
+                        locnumericUpDown3.Value = Info.tvInfo[8];
                         break;
                     }
                 case "Great Zapfish":
                     {
-                        masternumericUpDown.Value = Info.fishInfoSizeMaster;
-                        numericUpDown1.Value = Info.fishInfoSize1;
-                        numericUpDown3.Value = Info.fishInfoSize2;
-                        numericUpDown4.Value = Info.fishInfoSize3;
-                        locnumericUpDown1.Value = Info.fishInfoPoint1;
-                        locnumericUpDown2.Value = Info.fishInfoPoint2;
-                        locnumericUpDown3.Value = Info.fishInfoPoint3;
+                        numericUpDown1.Value = Info.fishInfo[0];
+                        numericUpDown3.Value = Info.fishInfo[1];
+                        numericUpDown4.Value = Info.fishInfo[2];
+                        masternumericUpDown.Value = Info.fishInfo[5];
+                        locnumericUpDown1.Value = Info.fishInfo[6];
+                        locnumericUpDown2.Value = Info.fishInfo[7];
+                        locnumericUpDown3.Value = Info.fishInfo[8];
                         break;
                     }
                 case "Tree 1":
                     {
-                        masternumericUpDown.Value = Info.tree1InfoSizeMaster;
-                        numericUpDown1.Value = Info.tree1InfoSize1;
-                        numericUpDown3.Value = Info.tree1InfoSize2;
-                        numericUpDown4.Value = Info.tree1InfoSize3;
-                        locnumericUpDown1.Value = Info.tree1InfoPoint1;
-                        locnumericUpDown2.Value = Info.tree1InfoPoint2;
-                        locnumericUpDown3.Value = Info.tree1InfoPoint3;
+                        numericUpDown1.Value = Info.tree1Info[0];
+                        numericUpDown3.Value = Info.tree1Info[1];
+                        numericUpDown4.Value = Info.tree1Info[2];
+                        masternumericUpDown.Value = Info.tree1Info[5];
+                        locnumericUpDown1.Value = Info.tree1Info[6];
+                        locnumericUpDown2.Value = Info.tree1Info[7];
+                        locnumericUpDown3.Value = Info.tree1Info[8];
                         break;
                     }
                 case "Tree 2":
                     {
-                        masternumericUpDown.Value = Info.tree2InfoSizeMaster;
-                        numericUpDown1.Value = Info.tree2InfoSize1;
-                        numericUpDown3.Value = Info.tree2InfoSize2;
-                        numericUpDown4.Value = Info.tree2InfoSize3;
-                        locnumericUpDown1.Value = Info.tree2InfoPoint1;
-                        locnumericUpDown2.Value = Info.tree2InfoPoint2;
-                        locnumericUpDown3.Value = Info.tree2InfoPoint3;
+                        numericUpDown1.Value = Info.tree2Info[0];
+                        numericUpDown3.Value = Info.tree2Info[1];
+                        numericUpDown4.Value = Info.tree2Info[2];
+                        masternumericUpDown.Value = Info.tree2Info[5];
+                        locnumericUpDown1.Value = Info.tree2Info[6];
+                        locnumericUpDown2.Value = Info.tree2Info[7];
+                        locnumericUpDown3.Value = Info.tree2Info[8];
                         break;
                     }
                 case "Tree 3":
                     {
-                        masternumericUpDown.Value = Info.tree3InfoSizeMaster;
-                        numericUpDown1.Value = Info.tree3InfoSize1;
-                        numericUpDown3.Value = Info.tree3InfoSize2;
-                        numericUpDown4.Value = Info.tree3InfoSize3;
-                        locnumericUpDown1.Value = Info.tree3InfoPoint1;
-                        locnumericUpDown2.Value = Info.tree3InfoPoint2;
-                        locnumericUpDown3.Value = Info.tree3InfoPoint3;
+                        numericUpDown1.Value = Info.tree3Info[0];
+                        numericUpDown3.Value = Info.tree3Info[1];
+                        numericUpDown4.Value = Info.tree3Info[2];
+                        masternumericUpDown.Value = Info.tree3Info[5];
+                        locnumericUpDown1.Value = Info.tree3Info[6];
+                        locnumericUpDown2.Value = Info.tree3Info[7];
+                        locnumericUpDown3.Value = Info.tree3Info[8];
                         break;
                     }
                 case "Tree 4":
                     {
-                        masternumericUpDown.Value = Info.tree4InfoSizeMaster;
-                        numericUpDown1.Value = Info.tree4InfoSize1;
-                        numericUpDown3.Value = Info.tree4InfoSize2;
-                        numericUpDown4.Value = Info.tree4InfoSize3;
-                        locnumericUpDown1.Value = Info.tree4InfoPoint1;
-                        locnumericUpDown2.Value = Info.tree4InfoPoint2;
-                        locnumericUpDown3.Value = Info.tree4InfoPoint3;
+                        numericUpDown1.Value = Info.tree4Info[0];
+                        numericUpDown3.Value = Info.tree4Info[1];
+                        numericUpDown4.Value = Info.tree4Info[2];
+                        masternumericUpDown.Value = Info.tree4Info[5];
+                        locnumericUpDown1.Value = Info.tree4Info[6];
+                        locnumericUpDown2.Value = Info.tree4Info[7];
+                        locnumericUpDown3.Value = Info.tree4Info[8];
                         break;
                     }
                 case "Bird 1":
                     {
-                        masternumericUpDown.Value = Info.bird1InfoSizeMaster;
-                        numericUpDown1.Value = Info.bird1InfoSize1;
-                        numericUpDown2.Value = Info.bird1InfoSize2;
-                        numericUpDown3.Value = Info.bird1InfoSize3;
-                        numericUpDown4.Value = Info.bird1InfoSize4;
-                        numericUpDown5.Value = Info.bird1InfoSize5;
-                        locnumericUpDown1.Value = Info.bird1InfoPoint1;
-                        locnumericUpDown2.Value = Info.bird1InfoPoint2;
-                        locnumericUpDown3.Value = Info.bird1InfoPoint3;
+                        numericUpDown1.Value = Info.bird1Info[0];
+                        numericUpDown2.Value = Info.bird1Info[1];
+                        numericUpDown3.Value = Info.bird1Info[2];
+                        numericUpDown4.Value = Info.bird1Info[3];
+                        numericUpDown5.Value = Info.bird1Info[4];
+                        masternumericUpDown.Value = Info.bird1Info[5];
+                        locnumericUpDown1.Value = Info.bird1Info[6];
+                        locnumericUpDown2.Value = Info.bird1Info[7];
+                        locnumericUpDown3.Value = Info.bird1Info[8];
                         break;
                     }
                 case "Bird 2":
                     {
-                        masternumericUpDown.Value = Info.bird2InfoSizeMaster;
-                        numericUpDown1.Value = Info.bird2InfoSize1;
-                        numericUpDown2.Value = Info.bird2InfoSize2;
-                        numericUpDown3.Value = Info.bird2InfoSize3;
-                        numericUpDown4.Value = Info.bird2InfoSize4;
-                        numericUpDown5.Value = Info.bird2InfoSize5;
-                        locnumericUpDown1.Value = Info.bird2InfoPoint1;
-                        locnumericUpDown2.Value = Info.bird2InfoPoint2;
-                        locnumericUpDown3.Value = Info.bird2InfoPoint3;
+                        numericUpDown1.Value = Info.bird2Info[0];
+                        numericUpDown2.Value = Info.bird2Info[1];
+                        numericUpDown3.Value = Info.bird2Info[2];
+                        numericUpDown4.Value = Info.bird2Info[3];
+                        numericUpDown5.Value = Info.bird2Info[4];
+                        masternumericUpDown.Value = Info.bird2Info[5];
+                        locnumericUpDown1.Value = Info.bird2Info[6];
+                        locnumericUpDown2.Value = Info.bird2Info[7];
+                        locnumericUpDown3.Value = Info.bird2Info[8];
                         break;
                     }
                 case "Bird 3":
                     {
-                        masternumericUpDown.Value = Info.bird3InfoSizeMaster;
-                        numericUpDown1.Value = Info.bird3InfoSize1;
-                        numericUpDown2.Value = Info.bird3InfoSize2;
-                        numericUpDown3.Value = Info.bird3InfoSize3;
-                        numericUpDown4.Value = Info.bird3InfoSize4;
-                        numericUpDown5.Value = Info.bird3InfoSize5;
-                        locnumericUpDown1.Value = Info.bird3InfoPoint1;
-                        locnumericUpDown2.Value = Info.bird3InfoPoint2;
-                        locnumericUpDown3.Value = Info.bird3InfoPoint3;
+                        numericUpDown1.Value = Info.bird3Info[0];
+                        numericUpDown2.Value = Info.bird3Info[1];
+                        numericUpDown3.Value = Info.bird3Info[2];
+                        numericUpDown4.Value = Info.bird3Info[3];
+                        numericUpDown5.Value = Info.bird3Info[4];
+                        masternumericUpDown.Value = Info.bird3Info[5];
+                        locnumericUpDown1.Value = Info.bird3Info[6];
+                        locnumericUpDown2.Value = Info.bird3Info[7];
+                        locnumericUpDown3.Value = Info.bird3Info[8];
                         break;
                     }
                 case "Bird 4":
                     {
-                        masternumericUpDown.Value = Info.bird4InfoSizeMaster;
-                        numericUpDown1.Value = Info.bird4InfoSize1;
-                        numericUpDown2.Value = Info.bird4InfoSize2;
-                        numericUpDown3.Value = Info.bird4InfoSize3;
-                        numericUpDown4.Value = Info.bird4InfoSize4;
-                        numericUpDown5.Value = Info.bird4InfoSize5;
-                        locnumericUpDown1.Value = Info.bird4InfoPoint1;
-                        locnumericUpDown2.Value = Info.bird4InfoPoint2;
-                        locnumericUpDown3.Value = Info.bird4InfoPoint3;
+                        numericUpDown1.Value = Info.bird4Info[0];
+                        numericUpDown2.Value = Info.bird4Info[1];
+                        numericUpDown3.Value = Info.bird4Info[2];
+                        numericUpDown4.Value = Info.bird4Info[3];
+                        numericUpDown5.Value = Info.bird4Info[4];
+                        masternumericUpDown.Value = Info.bird4Info[5];
+                        locnumericUpDown1.Value = Info.bird4Info[6];
+                        locnumericUpDown2.Value = Info.bird4Info[7];
+                        locnumericUpDown3.Value = Info.bird4Info[8];
                         break;
                     }
                 case "Bird 5":
                     {
-                        masternumericUpDown.Value = Info.bird5InfoSizeMaster;
-                        numericUpDown1.Value = Info.bird5InfoSize1;
-                        numericUpDown2.Value = Info.bird5InfoSize2;
-                        numericUpDown3.Value = Info.bird5InfoSize3;
-                        numericUpDown4.Value = Info.bird5InfoSize4;
-                        numericUpDown5.Value = Info.bird5InfoSize5;
-                        locnumericUpDown1.Value = Info.bird5InfoPoint1;
-                        locnumericUpDown2.Value = Info.bird5InfoPoint2;
-                        locnumericUpDown3.Value = Info.bird5InfoPoint3;
+                        numericUpDown1.Value = Info.bird5Info[0];
+                        numericUpDown2.Value = Info.bird5Info[1];
+                        numericUpDown3.Value = Info.bird5Info[2];
+                        numericUpDown4.Value = Info.bird5Info[3];
+                        numericUpDown5.Value = Info.bird5Info[4];
+                        masternumericUpDown.Value = Info.bird5Info[5];
+                        locnumericUpDown1.Value = Info.bird5Info[6];
+                        locnumericUpDown2.Value = Info.bird5Info[7];
+                        locnumericUpDown3.Value = Info.bird5Info[8];
                         break;
                     }
                 case "Dooris (Ammo Knights)":
                     {
-                        masternumericUpDown.Value = Info.doorWeaponInfoSizeMaster;
-                        numericUpDown1.Value = Info.doorWeaponInfoSize1;
-                        numericUpDown3.Value = Info.doorWeaponInfoSize2;
-                        numericUpDown4.Value = Info.doorWeaponInfoSize3;
-                        locnumericUpDown1.Value = Info.doorWeaponInfoPoint1;
-                        locnumericUpDown2.Value = Info.doorWeaponInfoPoint2;
-                        locnumericUpDown3.Value = Info.doorWeaponInfoPoint3;
+                        numericUpDown1.Value = Info.doorWeaponInfo[0];
+                        numericUpDown3.Value = Info.doorWeaponInfo[1];
+                        numericUpDown4.Value = Info.doorWeaponInfo[2];
+                        masternumericUpDown.Value = Info.doorWeaponInfo[5];
+                        locnumericUpDown1.Value = Info.doorWeaponInfo[6];
+                        locnumericUpDown2.Value = Info.doorWeaponInfo[7];
+                        locnumericUpDown3.Value = Info.doorWeaponInfo[8];
                         break;
                     }
                 case "Doory (Cooler Heads)":
                     {
-                        masternumericUpDown.Value = Info.doorHatInfoSizeMaster;
-                        numericUpDown1.Value = Info.doorHatInfoSize1;
-                        numericUpDown3.Value = Info.doorHatInfoSize2;
-                        numericUpDown4.Value = Info.doorHatInfoSize3;
-                        locnumericUpDown1.Value = Info.doorHatInfoPoint1;
-                        locnumericUpDown2.Value = Info.doorHatInfoPoint2;
-                        locnumericUpDown3.Value = Info.doorHatInfoPoint3;
+                        numericUpDown1.Value = Info.doorHatInfo[0];
+                        numericUpDown3.Value = Info.doorHatInfo[1];
+                        numericUpDown4.Value = Info.doorHatInfo[2];
+                        masternumericUpDown.Value = Info.doorHatInfo[5];
+                        locnumericUpDown1.Value = Info.doorHatInfo[6];
+                        locnumericUpDown2.Value = Info.doorHatInfo[7];
+                        locnumericUpDown3.Value = Info.doorHatInfo[8];
                         break;
                     }
                 case "Doorothy (Jelly Fresh)":
                     {
-                        masternumericUpDown.Value = Info.doorShirtInfoSizeMaster;
-                        numericUpDown1.Value = Info.doorShirtInfoSize1;
-                        numericUpDown3.Value = Info.doorShirtInfoSize2;
-                        numericUpDown4.Value = Info.doorShirtInfoSize3;
-                        locnumericUpDown1.Value = Info.doorShirtInfoPoint1;
-                        locnumericUpDown2.Value = Info.doorShirtInfoPoint2;
-                        locnumericUpDown3.Value = Info.doorShirtInfoPoint3;
+                        numericUpDown1.Value = Info.doorShirtInfo[0];
+                        numericUpDown3.Value = Info.doorShirtInfo[1];
+                        numericUpDown4.Value = Info.doorShirtInfo[2];
+                        masternumericUpDown.Value = Info.doorShirtInfo[5];
+                        locnumericUpDown1.Value = Info.doorShirtInfo[6];
+                        locnumericUpDown2.Value = Info.doorShirtInfo[7];
+                        locnumericUpDown3.Value = Info.doorShirtInfo[8];
                         break;
                     }
                 case "Doorian (Shrimp Kicks)":
                     {
-                        masternumericUpDown.Value = Info.doorShoesInfoSizeMaster;
-                        numericUpDown1.Value = Info.doorShoesInfoSize1;
-                        numericUpDown3.Value = Info.doorShoesInfoSize2;
-                        numericUpDown4.Value = Info.doorShoesInfoSize3;
-                        locnumericUpDown1.Value = Info.doorShoesInfoPoint1;
-                        locnumericUpDown2.Value = Info.doorShoesInfoPoint2;
-                        locnumericUpDown3.Value = Info.doorShoesInfoPoint3;
+                        numericUpDown1.Value = Info.doorShoesInfo[0];
+                        numericUpDown3.Value = Info.doorShoesInfo[1];
+                        numericUpDown4.Value = Info.doorShoesInfo[2];
+                        masternumericUpDown.Value = Info.doorShoesInfo[5];
+                        locnumericUpDown1.Value = Info.doorShoesInfo[6];
+                        locnumericUpDown2.Value = Info.doorShoesInfo[7];
+                        locnumericUpDown3.Value = Info.doorShoesInfo[8];
                         break;
                     }
                 case "Inkopolis Tower Door":
                     {
-                        masternumericUpDown.Value = Info.doorVSInfoSizeMaster;
-                        numericUpDown1.Value = Info.doorVSInfoSize1;
-                        numericUpDown3.Value = Info.doorVSInfoSize2;
-                        numericUpDown4.Value = Info.doorVSInfoSize3;
-                        locnumericUpDown1.Value = Info.doorVSInfoPoint1;
-                        locnumericUpDown2.Value = Info.doorVSInfoPoint2;
-                        locnumericUpDown3.Value = Info.doorVSInfoPoint3;
+                        numericUpDown1.Value = Info.doorVSInfo[0];
+                        numericUpDown3.Value = Info.doorVSInfo[1];
+                        numericUpDown4.Value = Info.doorVSInfo[2];
+                        masternumericUpDown.Value = Info.doorVSInfo[5];
+                        locnumericUpDown1.Value = Info.doorVSInfo[6];
+                        locnumericUpDown2.Value = Info.doorVSInfo[7];
+                        locnumericUpDown3.Value = Info.doorVSInfo[8];
                         break;
                     }
                 case "Battle Dojo Doors":
                     {
-                        masternumericUpDown.Value = Info.doorDojoInfoSizeMaster;
-                        numericUpDown1.Value = Info.doorDojoInfoSize1;
-                        numericUpDown3.Value = Info.doorDojoInfoSize2;
-                        numericUpDown4.Value = Info.doorDojoInfoSize3;
-                        locnumericUpDown1.Value = Info.doorDojoInfoPoint1;
-                        locnumericUpDown2.Value = Info.doorDojoInfoPoint2;
-                        locnumericUpDown3.Value = Info.doorDojoInfoPoint3;
+                        numericUpDown1.Value = Info.doorDojoInfo[0];
+                        numericUpDown3.Value = Info.doorDojoInfo[1];
+                        numericUpDown4.Value = Info.doorDojoInfo[2];
+                        masternumericUpDown.Value = Info.doorDojoInfo[5];
+                        locnumericUpDown1.Value = Info.doorDojoInfo[6];
+                        locnumericUpDown2.Value = Info.doorDojoInfo[7];
+                        locnumericUpDown3.Value = Info.doorDojoInfo[8];
                         break;
                     }
             }
@@ -1434,360 +1447,194 @@ namespace PlazaToon
             {
                 case "Callie":
                     {
-                        Info.callieInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.callieInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.callieInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.callieInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Callie's Chair":
                     {
-                        Info.callieChairInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.callieChairInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.callieChairInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.callieChairInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Marie":
                     {
-                        Info.marieInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.marieInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.marieInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.marieInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Marie's Chair":
                     {
-                        Info.marieChairInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.marieChairInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.marieChairInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.marieChairInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Judd":
                     {
-                        Info.juddInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.juddInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.juddInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.juddInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Spyke":
                     {
-                        Info.spykeInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.spykeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.spykeInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.spykeInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Sea Snails":
                     {
-                        Info.shellInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.shellInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.shellInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.shellInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Train":
                     {
-                        Info.trainInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.trainInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.trainInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.trainInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Amiibo Box":
                     {
-                        Info.amiiboInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.amiiboInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.amiiboInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.amiiboInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Balloon":
                     {
-                        Info.balloonInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.balloonInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.balloonInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.balloonInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Miiverse Post":
                     {
-                        Info.postInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.postInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.postInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.postInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Arcade":
                     {
-                        Info.arcadeInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.arcadeInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.arcadeInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.arcadeInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Manhole":
                     {
-                        Info.manHoleInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.manHoleInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.manHoleInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.manHoleInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Weapon Sign":
                     {
-                        Info.weaponSignInfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.weaponSignInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.weaponSignInfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.weaponSignInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Awning":
                     {
-                        Info.clothInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.clothInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.clothInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.clothInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Main TV":
                     {
-                        Info.tvInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.tvInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.tvInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.tvInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Great Zapfish":
                     {
-                        Info.fishInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.fishInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.fishInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.fishInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Tree 1":
                     {
-                        Info.tree1InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.tree1InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.tree1InfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.tree1InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Tree 2":
                     {
-                        Info.tree2InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.tree2InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.tree2InfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.tree2InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Tree 3":
                     {
-                        Info.tree3InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.tree3InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.tree3InfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.tree3InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Tree 4":
                     {
-                        Info.tree4InfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.tree4InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.tree4InfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.tree4InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Bird 1":
                     {
-                        Info.bird1InfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.bird1InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.bird1InfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.bird1InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Bird 2":
                     {
-                        Info.bird2InfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.bird2InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.bird2InfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.bird2InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Bird 3":
                     {
-                        Info.bird3InfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.bird3InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.bird3InfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.bird3InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Bird 4":
                     {
-                        Info.bird4InfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.bird4InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.bird4InfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.bird4InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Bird 5":
                     {
-                        Info.bird5InfoSize(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value);
-                        Info.bird5InfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.bird5InfoSizeSav(numericUpDown1.Value, numericUpDown2.Value, numericUpDown3.Value, numericUpDown4.Value, numericUpDown5.Value, masternumericUpDown.Value);
+                        Info.bird5InfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Doory (Cooler Heads)":
                     {
-                        Info.doorHatInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.doorHatInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.doorHatInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.doorHatInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Doorothy (Jelly Fresh)":
                     {
-                        Info.doorShirtInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.doorShirtInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.doorShirtInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.doorShirtInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Doorian (Shrimp Kicks)":
                     {
-                        Info.doorShoesInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.doorShoesInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.doorShoesInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.doorShoesInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Dooris (Ammo Knights)":
                     {
-                        Info.doorWeaponInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.doorWeaponInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.doorWeaponInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.doorWeaponInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Inkopolis Tower Door":
                     {
-                        Info.doorVSInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.doorVSInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
+                        Info.doorVSInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.doorVSInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
                 case "Battle Dojo Doors":
                     {
-                        Info.doorDojoInfoSize(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value);
-                        Info.doorDojoInfoPoint(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
-                        break;
-                    }
-            }
-        }
-        private void masterScaleSav() //saves master scale values
-        {
-            switch (NPCcomboBox.Text)
-            {
-                case "Callie":
-                    {
-                        Info.callieMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Callie's Chair":
-                    {
-                        Info.callieChairMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Marie":
-                    {
-                        Info.marieMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Marie's Chair":
-                    {
-                        Info.marieChairMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Judd":
-                    {
-                        Info.juddMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Spyke":
-                    {
-                        Info.spykeMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Sea Snails":
-                    {
-                        Info.shellMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Train":
-                    {
-                        Info.trainMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Amiibo Box":
-                    {
-                        Info.amiiboMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Balloon":
-                    {
-                        Info.balloonMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Miiverse Post":
-                    {
-                        Info.postMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Arcade":
-                    {
-                        Info.arcadeMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Manhole":
-                    {
-                        Info.manHoleMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Weapon Sign":
-                    {
-                        Info.weaponSignMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Awning":
-                    {
-                        Info.clothMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Main TV":
-                    {
-                        Info.tvMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Great Zapfish":
-                    {
-                        Info.fishMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Tree 1":
-                    {
-                        Info.tree1MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Tree 2":
-                    {
-                        Info.tree2MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Tree 3":
-                    {
-                        Info.tree3MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Tree 4":
-                    {
-                        Info.tree4MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Bird 1":
-                    {
-                        Info.bird1MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Bird 2":
-                    {
-                        Info.bird2MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Bird 3":
-                    {
-                        Info.bird3MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Bird 4":
-                    {
-                        Info.bird4MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Bird 5":
-                    {
-                        Info.bird5MasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Doory (Cooler Heads)":
-                    {
-                        Info.doorHatMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Doorothy (Jelly Fresh)":
-                    {
-                        Info.doorShirtMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Doorian (Shrimp Kicks)":
-                    {
-                        Info.doorShoesMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Dooris (Ammo Knights)":
-                    {
-                        Info.doorWeaponMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Inkopolis Tower Door":
-                    {
-                        Info.doorVSMasterScale(masternumericUpDown.Value);
-                        break;
-                    }
-                case "Battle Dojo Doors":
-                    {
-                        Info.doorDojoMasterScale(masternumericUpDown.Value);
+                        Info.doorDojoInfoSizeSav(numericUpDown1.Value, numericUpDown3.Value, numericUpDown4.Value, masternumericUpDown.Value);
+                        Info.doorDojoInfoPointSav(locnumericUpDown1.Value, locnumericUpDown2.Value, locnumericUpDown3.Value);
                         break;
                     }
             }

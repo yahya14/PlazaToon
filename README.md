@@ -16,10 +16,11 @@ As of version 0.5, this tool now requires you to press the poke buttons manually
 
 Because NPC addresses tend to move everytime a loading screen appears, the **Recalculate** button will help find the dynamic addresses for you, which needs to be pressed after every loading screen when you enter the plaza. if the addresses aren't recalculated properly, the game has a chance of crashing.
 
-The **Connect** button also acts as a way to differentiate between loadiine and geckiine. It's somewhat useful if you want to know which one you're using:
+The **Connect** button also acts as a way to differentiate between loadiine and geckiine or Cosmo Cortney's Code Handler. It's somewhat useful if you want to know which one you're using:
 
 + Light blue indicaties a loadiine connection.
-+ Dark blue indicates geckiine connection.
++ Dark blue indicates a geckiine connection.
++ Orange indicates a code handler connection.
 
 ##Usage
 
@@ -29,7 +30,7 @@ The **Connect** button also acts as a way to differentiate between loadiine and 
 + [.NET Framework 4.5.2](http://go.microsoft.com/fwlink/?LinkId=328843)
 + Wii U System Firmware 5.5.1 or below
 + Splatoon with version 2.12.0
-+ TCPGecko + kernel from loadiine.ovh (Also works with Geckiine which can be found [here](http://466gaming.ga/geckiine/))
++ TCPGecko + kernel from loadiine.ovh website, Cortney's [code handler](https://gbatemp.net/threads/post-your-wiiu-cheat-codes-here.395443/), or [geckiine](https://gbatemp.net/threads/release-geckiine-tcpgecko-and-cafiine-combined.433057/)
 
 ###How to use it
 
