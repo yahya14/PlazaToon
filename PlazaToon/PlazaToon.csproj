@@ -72,11 +72,11 @@
     </Compile>
     <Compile Include="Info.cs" />
     <Compile Include="MemAreas.cs" />
-    <Compile Include="toolstrip.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tcpconn.cs" />
     <Compile Include="TCPGecko.cs" />
+    <Compile Include="toolstrip.cs" />
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

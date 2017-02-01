@@ -61,7 +61,10 @@
             this.multiLabel = new System.Windows.Forms.Label();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restoreAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.setSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -671,7 +674,8 @@
             // 
             this.optionsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.restoreAllToolStripMenuItem,
+            this.reloadAllToolStripMenuItem,
+            this.customAllToolStripMenuItem,
             this.resetAllToolStripMenuItem});
             this.optionsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.optionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -681,20 +685,44 @@
             this.optionsToolStripMenuItem.DropDownClosed += new System.EventHandler(this.optionsToolStripMenuItem_DropDownClosed);
             this.optionsToolStripMenuItem.DropDownOpened += new System.EventHandler(this.optionsToolStripMenuItem_DropDownOpened);
             // 
-            // restoreAllToolStripMenuItem
+            // reloadAllToolStripMenuItem
             // 
-            this.restoreAllToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.restoreAllToolStripMenuItem.Name = "restoreAllToolStripMenuItem";
-            this.restoreAllToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.restoreAllToolStripMenuItem.Text = "Reload All";
-            this.restoreAllToolStripMenuItem.ToolTipText = "Reloads all NPC\'s scales and locations (use after loading screens)";
-            this.restoreAllToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            this.reloadAllToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.reloadAllToolStripMenuItem.Name = "reloadAllToolStripMenuItem";
+            this.reloadAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.reloadAllToolStripMenuItem.Text = "Reload All";
+            this.reloadAllToolStripMenuItem.ToolTipText = "Reloads all NPC\'s scales and locations (use after loading screens)";
+            this.reloadAllToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            // 
+            // customAllToolStripMenuItem
+            // 
+            this.customAllToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.customToolStripTextBox,
+            this.setSizeToolStripMenuItem});
+            this.customAllToolStripMenuItem.Name = "customAllToolStripMenuItem";
+            this.customAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.customAllToolStripMenuItem.Text = "Custom All";
+            // 
+            // customToolStripTextBox
+            // 
+            this.customToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.customToolStripTextBox.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.customToolStripTextBox.Name = "customToolStripTextBox";
+            this.customToolStripTextBox.Size = new System.Drawing.Size(90, 23);
+            this.customToolStripTextBox.Text = "10";
+            // 
+            // setSizeToolStripMenuItem
+            // 
+            this.setSizeToolStripMenuItem.Name = "setSizeToolStripMenuItem";
+            this.setSizeToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.setSizeToolStripMenuItem.Text = "Set Size";
+            this.setSizeToolStripMenuItem.Click += new System.EventHandler(this.setSizeToolStripMenuItem_Click);
             // 
             // resetAllToolStripMenuItem
             // 
             this.resetAllToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
-            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.resetAllToolStripMenuItem.Text = "Reset All";
             this.resetAllToolStripMenuItem.ToolTipText = "Resets all NPC\'s original scales and locations";
             this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.resetAllToolStripMenuItem_Click);
@@ -735,6 +763,7 @@
             this.comingSoonToolStripMenuItem.Name = "comingSoonToolStripMenuItem";
             this.comingSoonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.comingSoonToolStripMenuItem.Text = "Tips and Tricks";
+            this.comingSoonToolStripMenuItem.Visible = false;
             this.comingSoonToolStripMenuItem.Click += new System.EventHandler(this.comingSoonToolStripMenuItem_Click);
             // 
             // msgTimer
@@ -804,7 +833,9 @@
             this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "Main";
-            this.Text = "PlazaToon v0.6";
+            this.Text = "PlazaToon | February 2017 Build";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
+            this.Load += new System.EventHandler(this.Main_Load);
             this.TCPBox.ResumeLayout(false);
             this.TCPBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -869,8 +900,11 @@
         private System.Windows.Forms.ToolStripMenuItem rattataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem comingSoonToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem restoreAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reloadAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox customToolStripTextBox;
+        private System.Windows.Forms.ToolStripMenuItem setSizeToolStripMenuItem;
     }
 }
 
